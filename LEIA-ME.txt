@@ -1,0 +1,44 @@
+QUARTEL DE ESTUDOS — CEBRASPE PMMA / BMMA / PCMA
+=================================================
+
+O QUE ABRIR
+-----------
+estudo-cebraspe-ma.html
+  -> Este é o app pronto, com as 505 questões já embutidas.
+  -> Basta abrir no navegador (duplo clique) ou hospedar em qualquer servidor estático.
+
+COMO O PROJETO FOI MONTADO (caso queira editar o banco de questões)
+---------------------------------------------------------------------
+questions.json
+  -> Banco de questões completo (505 itens), no formato:
+     { id, corp: "PM"|"BM"|"PC", disc, tipo: "CE"|"MC", enun, resp, exp, alts (só p/ MC) }
+
+gen.py, gen2.py, gen3.py, gen4.py, gen5.py, gen6.py, gen7.py
+  -> Scripts Python usados, em sequência, para gerar/expandir o questions.json.
+  -> Rode-os em ordem (gen.py primeiro, depois gen2.py, gen3.py, ...) para reconstruir
+     o banco do zero, ou copie o padrão deles para adicionar suas próprias questões.
+
+app-template.html
+  -> O HTML/CSS/JS do site, com o marcador __QUESTIONS_JSON__ no lugar do banco de
+     questões. Para gerar o arquivo final, substitua esse marcador pelo conteúdo de
+     questions.json (é isso que o comando abaixo faz).
+
+REGERAR O ARQUIVO FINAL DEPOIS DE EDITAR O BANCO
+-------------------------------------------------
+Com Python instalado, rode na pasta deste projeto:
+
+    python3 -c "
+import json
+data = open('questions.json', encoding='utf-8').read()
+html = open('app-template.html', encoding='utf-8').read()
+html = html.replace('__QUESTIONS_JSON__', data)
+open('estudo-cebraspe-ma.html', 'w', encoding='utf-8').write(html)
+print('gerado com sucesso')
+"
+
+BANCO DE DADOS EXTERNO
+-----------------------
+Na aba "Config" do app existe um painel para conectar a uma API REST externa
+(ex.: Supabase, Firebase, ou uma API própria) e sincronizar o progresso do usuário.
+Por ser um app 100% estático (HTML/JS puro, sem servidor), a conexão depende de a
+API de destino permitir chamadas via CORS a partir do navegador.

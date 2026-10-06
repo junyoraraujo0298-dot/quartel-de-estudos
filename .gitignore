@@ -1,0 +1,6 @@
+# Backup antigo do app, nao precisa versionar
+estudo-cebraspe-ma.html.bak
+
+# Lixo comum de SO/editor
+.DS_Store
+Thumbs.db
