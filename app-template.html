@@ -1559,7 +1559,7 @@ const LAW_DECKS = {
   lei: { label: "Lei 6.513/95 (Estatuto — PM e BM)", data: LAW_6513, corp: null },
   lei12896: { label: "Lei 12.896/2026 (PMMA)", data: LEI_12896, corp: "PM" },
   lei10230: { label: "Lei 10.230/2015 (CBMMA)", data: LAW_10230, corp: "BM" },
-  lei14751: { label: "Lei 14.751/2023 (Nacional — PM e BM)", data: LAW_14751, corp: null },
+  lei14751: { label: "Lei 14.751/2023 (Lei Orgânica Nacional — PM e BM)", data: LAW_14751, corp: null },
   comparativo: { label: "Comparativo das 3 Leis (PMMA)", data: LAW_COMPARISON, corp: "PM" }
 };
 const FLASH_DECKS = {
@@ -1955,7 +1955,8 @@ function matchesFilter(q){
   const discOk = state.disc.length === 0 || state.disc.includes(q.disc);
   const assuntoOk = state.assunto.length === 0 || state.assunto.includes(q.assunto);
   const modalidadeOk = state.modalidade.length === 0 || state.modalidade.includes(q.tipo);
-  const keywordOk = !state.keyword || q.enun.toLowerCase().includes(state.keyword);
+  const keywordOk = !state.keyword || q.enun.toLowerCase().includes(state.keyword) ||
+    q.disc.toLowerCase().includes(state.keyword) || q.assunto.toLowerCase().includes(state.keyword);
   const statusOk = qfStatusOk(q);
   return corpOk && discOk && assuntoOk && modalidadeOk && keywordOk && statusOk;
 }
