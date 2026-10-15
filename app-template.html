@@ -398,8 +398,11 @@
             </button>
             <div class="qf-dd-panel" id="qfPanelDisc"></div>
           </div>
-          <div class="qf-dd disabled" title="Não há dado de 'assunto' cadastrado neste banco de questões.">
-            <button class="qf-dd-btn" disabled><span class="qf-dd-lab">Assunto</span><span class="qf-dd-caret">▾</span></button>
+          <div class="qf-dd" id="qfDropAssunto">
+            <button class="qf-dd-btn" onclick="qfToggleDrop('assunto')">
+              <span class="qf-dd-lab">Assunto</span><span class="qf-dd-caret">▾</span>
+            </button>
+            <div class="qf-dd-panel" id="qfPanelAssunto"></div>
           </div>
           <div class="qf-dd disabled" title="Este banco é 100% questões inéditas estilo CEBRASPE.">
             <button class="qf-dd-btn" disabled><span class="qf-dd-lab">Banca</span><span class="qf-dd-badge">CEBRASPE</span></button>
@@ -585,7 +588,7 @@ const CORP_INFO = {
 const CORPS = ["Todos","PM","BM","PC"];
 const LETTERS = ["A","B","C","D","E"];
 
-let state = { corp:"Todos", disc:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas" };
+let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas" };
 
 const LAW_6513 = [
 {"t":"tit","x":"LEI Nº 6.513, DE 30 DE NOVEMBRO DE 1995 — Estatuto dos Policiais-Militares da Polícia Militar do Maranhão"},
@@ -1797,6 +1800,10 @@ function disciplinesFor(corp){
   const list = QUESTIONS.filter(q => corp==="Todos" || q.corp===corp).map(q=>q.disc);
   return [...new Set(list)];
 }
+function assuntosFor(corp){
+  const list = QUESTIONS.filter(q => corp==="Todos" || q.corp===corp).map(q=>q.assunto);
+  return [...new Set(list)].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
 function buildCorpChips(){
   const box = document.getElementById('corpChips');
   box.innerHTML = CORPS.map(c=>{
@@ -1808,7 +1815,7 @@ function buildCorpChips(){
   });
 }
 function selectCorp(corp){
-  state.corp = corp; state.disc = [];
+  state.corp = corp; state.disc = []; state.assunto = [];
   applyTheme(state.corp);
   buildCorpChips(); renderQfPanel(); buildQueue(); renderQuiz(); renderReview(); renderStats(); renderMeta(); renderLeitura(); renderTeoria();
 }
@@ -1855,6 +1862,11 @@ function qfToggleDiscValue(d){
   if(i>=0) state.disc.splice(i,1); else state.disc.push(d);
   buildQueue(); renderQuiz(); renderQfPanel();
 }
+function qfToggleAssuntoValue(a){
+  const i = state.assunto.indexOf(a);
+  if(i>=0) state.assunto.splice(i,1); else state.assunto.push(a);
+  buildQueue(); renderQuiz(); renderQfPanel();
+}
 function qfToggleModalidadeValue(m){
   const i = state.modalidade.indexOf(m);
   if(i>=0) state.modalidade.splice(i,1); else state.modalidade.push(m);
@@ -1881,6 +1893,7 @@ function renderQfTabs(){
 }
 function renderQfDropPanels(){
   const discPanel = document.getElementById('qfPanelDisc');
+  const assuntoPanel = document.getElementById('qfPanelAssunto');
   const instPanel = document.getElementById('qfPanelInst');
   const modalPanel = document.getElementById('qfPanelModal');
   if(discPanel){
@@ -1889,6 +1902,13 @@ function renderQfDropPanels(){
     discPanel.innerHTML = opts.map(d=>
       `<label><input type="checkbox" ${state.disc.includes(d)?'checked':''} onchange="qfToggleDiscValue('${d.replace(/'/g,"\\'")}')"> ${d}</label>`
     ).join('') || '<span class="qf-note">Nenhuma disciplina para esta corporação.</span>';
+  }
+  if(assuntoPanel){
+    const opts = assuntosFor(state.corp);
+    assuntoPanel.className = 'qf-dd-panel' + (qfOpenDrop==='assunto' ? ' show' : '');
+    assuntoPanel.innerHTML = opts.map(a=>
+      `<label><input type="checkbox" ${state.assunto.includes(a)?'checked':''} onchange="qfToggleAssuntoValue('${a.replace(/'/g,"\\'")}')"> ${a}</label>`
+    ).join('') || '<span class="qf-note">Nenhum assunto para esta corporação.</span>';
   }
   if(instPanel){
     instPanel.className = 'qf-dd-panel' + (qfOpenDrop==='inst' ? ' show' : '');
@@ -1905,6 +1925,8 @@ function renderQfDropPanels(){
   }
   const discBtn = document.querySelector('#qfDropDisc .qf-dd-btn');
   if(discBtn) discBtn.innerHTML = `<span class="qf-dd-lab">Disciplina</span>${state.disc.length?`<span class="qf-dd-badge">${state.disc.length} selecionado${state.disc.length>1?'s':''}</span>`:''}<span class="qf-dd-caret">▾</span>`;
+  const assuntoBtn = document.querySelector('#qfDropAssunto .qf-dd-btn');
+  if(assuntoBtn) assuntoBtn.innerHTML = `<span class="qf-dd-lab">Assunto</span>${state.assunto.length?`<span class="qf-dd-badge">${state.assunto.length} selecionado${state.assunto.length>1?'s':''}</span>`:''}<span class="qf-dd-caret">▾</span>`;
   const instBtn = document.querySelector('#qfDropInst .qf-dd-btn');
   if(instBtn) instBtn.innerHTML = `<span class="qf-dd-lab">Instituição</span>${state.corp!=="Todos"?`<span class="qf-dd-badge">${CORP_INFO[state.corp].label}</span>`:''}<span class="qf-dd-caret">▾</span>`;
   const modalBtn = document.querySelector('#qfDropModal .qf-dd-btn');
@@ -1931,10 +1953,11 @@ function renderMeta(){
 function matchesFilter(q){
   const corpOk = state.corp === "Todos" || q.corp === state.corp;
   const discOk = state.disc.length === 0 || state.disc.includes(q.disc);
+  const assuntoOk = state.assunto.length === 0 || state.assunto.includes(q.assunto);
   const modalidadeOk = state.modalidade.length === 0 || state.modalidade.includes(q.tipo);
   const keywordOk = !state.keyword || q.enun.toLowerCase().includes(state.keyword);
   const statusOk = qfStatusOk(q);
-  return corpOk && discOk && modalidadeOk && keywordOk && statusOk;
+  return corpOk && discOk && assuntoOk && modalidadeOk && keywordOk && statusOk;
 }
 function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function buildQueue(){
