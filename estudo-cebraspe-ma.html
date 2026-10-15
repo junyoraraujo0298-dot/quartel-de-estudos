@@ -494,6 +494,7 @@
     <div class="law-toolbar">
       <input type="text" id="lawSearch" class="cfg-input" placeholder="Buscar por número de artigo, tópico ou palavra-chave..." oninput="renderLeitura()">
       <span class="bank-note" id="lawCount"></span>
+      <button class="cfg-btn" id="lawPracticeBtn" onclick="practicarQuestoesDaLei()" style="display:none;"></button>
     </div>
     <div id="lawList" class="law-list"></div>
   </section>
@@ -2525,6 +2526,15 @@ const LAW_DECKS = {
   lei14751: { label: "Lei 14.751/2023 (Lei Orgânica Nacional — PM e BM)", data: LAW_14751, corp: null },
   comparativo: { label: "Comparativo das 3 Leis (PMMA)", data: LAW_COMPARISON, corp: "PM" }
 };
+// Liga cada deck de leitura ao "disc" exato usado nas questões daquela lei,
+// pra permitir pular direto da leitura pra praticar questões só dela.
+// 'comparativo' fica de fora (não é uma lei única, é um resumo de 3).
+const LEITURA_DECK_TO_DISC = {
+  lei: "Estatuto da PM/MA (Lei 6.513/95)",
+  lei12896: "Lei 12.896/2026 (Organização Básica da PMMA)",
+  lei10230: "Lei 10.230/2015 (Organização Básica do CBMMA)",
+  lei14751: "Lei 14.751/2023 (Lei Orgânica Nacional — PM e BM)"
+};
 const FLASH_DECKS = {
   lei: { label: "Lei 6.513/95 (pergunta e resposta)", data: FLASHCARDS, mode: "quiz" },
   hist: { label: "História do Maranhão (leitura)", data: HIST_MA_CARDS, mode: "read" }
@@ -3285,11 +3295,38 @@ function setLeituraDeck(key){
   document.getElementById('lawSearch').value = '';
   renderLeitura();
 }
+function practicarQuestoesDaLei(){
+  const disc = LEITURA_DECK_TO_DISC[state.leituraDeck];
+  if(!disc) return;
+  state.corp = "Todos";
+  state.disc = [disc];
+  state.assunto = [];
+  state.keyword = '';
+  state.modalidade = [];
+  state.qStatus = 'todas';
+  state.advancedOpen = true;
+  applyTheme(state.corp);
+  buildCorpChips();
+  activateTab('quiz');
+  buildQueue(); renderQuiz(); renderQfPanel();
+}
 
 function renderLeitura(){
   const decks = visibleLawDecks();
   if(!decks[state.leituraDeck]) state.leituraDeck = Object.keys(decks)[0];
   buildDeckRow('lawDeckRow', decks, state.leituraDeck, setLeituraDeck);
+  const practiceBtn = document.getElementById('lawPracticeBtn');
+  const discDaLei = LEITURA_DECK_TO_DISC[state.leituraDeck];
+  if(practiceBtn){
+    if(discDaLei){
+      const n = QUESTIONS.filter(q=>q.disc===discDaLei).length;
+      practiceBtn.style.display = 'inline-block';
+      practiceBtn.textContent = `📝 Praticar questões desta lei (${n})`;
+      practiceBtn.disabled = n === 0;
+    } else {
+      practiceBtn.style.display = 'none';
+    }
+  }
   if(state.leituraDeck === 'comparativo'){ renderComparativo(); return; }
   const deck = decks[state.leituraDeck].data;
   const list = document.getElementById('lawList');
@@ -3482,29 +3519,28 @@ function renderComic(){
   }).join('');
 }
 
+function activateTab(tab){
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.getElementById('tab-quiz').style.display = tab==='quiz' ? 'block':'none';
+  document.getElementById('tab-review').style.display = tab==='review' ? 'block':'none';
+  document.getElementById('tab-stats').style.display = tab==='stats' ? 'block':'none';
+  document.getElementById('tab-leitura').style.display = tab==='leitura' ? 'block':'none';
+  document.getElementById('tab-teoria').style.display = tab==='teoria' ? 'block':'none';
+  document.getElementById('tab-flash').style.display = tab==='flash' ? 'block':'none';
+  document.getElementById('tab-comic').style.display = tab==='comic' ? 'block':'none';
+  document.getElementById('tab-config').style.display = tab==='config' ? 'block':'none';
+  document.getElementById('metaBar').style.display = tab==='quiz' ? 'flex' : 'none';
+  if(tab==='review') renderReview();
+  if(tab==='stats') renderStats();
+  if(tab==='leitura') renderLeitura();
+  if(tab==='teoria') renderTeoria();
+  if(tab==='flash') renderFlash();
+  if(tab==='comic') renderComic();
+  if(tab==='config') renderConfig();
+}
 function setupTabs(){
   document.querySelectorAll('#tabs button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('#tabs button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const tab = btn.dataset.tab;
-      document.getElementById('tab-quiz').style.display = tab==='quiz' ? 'block':'none';
-      document.getElementById('tab-review').style.display = tab==='review' ? 'block':'none';
-      document.getElementById('tab-stats').style.display = tab==='stats' ? 'block':'none';
-      document.getElementById('tab-leitura').style.display = tab==='leitura' ? 'block':'none';
-      document.getElementById('tab-teoria').style.display = tab==='teoria' ? 'block':'none';
-      document.getElementById('tab-flash').style.display = tab==='flash' ? 'block':'none';
-      document.getElementById('tab-comic').style.display = tab==='comic' ? 'block':'none';
-      document.getElementById('tab-config').style.display = tab==='config' ? 'block':'none';
-      document.getElementById('metaBar').style.display = tab==='quiz' ? 'flex' : 'none';
-      if(tab==='review') renderReview();
-      if(tab==='stats') renderStats();
-      if(tab==='leitura') renderLeitura();
-      if(tab==='teoria') renderTeoria();
-      if(tab==='flash') renderFlash();
-      if(tab==='comic') renderComic();
-      if(tab==='config') renderConfig();
-    });
+    btn.addEventListener('click', ()=> activateTab(btn.dataset.tab));
   });
 }
 
