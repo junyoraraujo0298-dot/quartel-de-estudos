@@ -66,6 +66,7 @@ LAW_6513 = extract_const_array('LAW_6513')
 LEI_12896 = extract_const_array('LEI_12896')
 LAW_14751 = extract_const_array('LAW_14751')
 LAW_10230 = extract_const_array('LAW_10230')
+LAW_11390 = extract_const_array('LAW_11390')
 TEORIA_PORTUGUES = extract_const_array('TEORIA_PORTUGUES')
 TEORIA_GEOGRAFIA_MA = extract_const_array('TEORIA_GEOGRAFIA_MA')
 TEORIA_INGLES = extract_const_array('TEORIA_INGLES')
@@ -79,7 +80,8 @@ HIST_MA_CARDS = extract_const_array('HIST_MA_CARDS')
 
 print('Itens extraidos:')
 for name, arr in [('LAW_6513', LAW_6513), ('LEI_12896', LEI_12896), ('LAW_14751', LAW_14751),
-                   ('LAW_10230', LAW_10230), ('TEORIA_PORTUGUES', TEORIA_PORTUGUES),
+                   ('LAW_10230', LAW_10230), ('LAW_11390', LAW_11390),
+                   ('TEORIA_PORTUGUES', TEORIA_PORTUGUES),
                    ('TEORIA_GEOGRAFIA_MA', TEORIA_GEOGRAFIA_MA), ('TEORIA_INGLES', TEORIA_INGLES),
                    ('TEORIA_RACIOCINIO_LOGICO', TEORIA_RACIOCINIO_LOGICO),
                    ('TEORIA_PRIMEIROS_SOCORROS', TEORIA_PRIMEIROS_SOCORROS),
@@ -94,6 +96,7 @@ DECKS = {
     'law_12896':      ("Lei 12.896/2026 (PMMA)", 'lei', None, LEI_12896),
     'law_10230':      ("Lei 10.230/2015 (CBMMA)", 'lei', None, LAW_10230),
     'law_14751':      ("Lei 14.751/2023 (Nacional — PM e BM)", 'lei', None, LAW_14751),
+    'law_11390':      ("Lei 11.390/2020 (Segurança Contra Incêndio)", 'lei', None, LAW_11390),
     'law_comparativo':("Comparativo das 3 Leis (PMMA)", 'comparativo', None, LAW_COMPARISON),
     'teoria_portugues':("Língua Portuguesa", 'teoria', None, TEORIA_PORTUGUES),
     'teoria_geografia':("Geografia do Maranhão", 'teoria', None, TEORIA_GEOGRAFIA_MA),
