@@ -45,12 +45,7 @@
   .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
   .brand h1{font-family:'Stardos Stencil', serif;font-size:23px;letter-spacing:1px;margin:0;color:var(--navy);}
   .brand span.sub{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:1.3px;text-transform:uppercase;}
-  .corp-chips{display:flex;gap:8px;flex-wrap:wrap;}
-  .chip{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.5px;padding:6px 12px;border-radius:999px;
-    border:1px solid var(--navy-3);color:var(--muted);background:#F4F6FA;cursor:pointer;
-    transition:all .15s ease; user-select:none;}
-  .chip:hover{border-color:var(--gold);color:var(--gold-deep);}
-  .chip.active{background:var(--gold);color:#fff8ea;border-color:var(--gold);font-weight:600;}
+  .corp-select{width:auto;min-width:150px;cursor:pointer;font-weight:600;}
   nav.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
   nav.tabs button{flex:1;min-width:110px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;
     padding:11px 8px;background:var(--navy-2);border:1px solid var(--navy-3);color:var(--muted);
@@ -364,7 +359,7 @@
       <h1>QUARTEL&nbsp;DE&nbsp;ESTUDOS</h1>
       <span class="sub">CEBRASPE · PMMA · BMMA · PCMA — Edital 2026</span>
     </div>
-    <div class="corp-chips" id="corpChips"></div>
+    <select class="cfg-input corp-select" id="corpChips" onchange="selectCorp(this.value)"></select>
   </header>
 
   <nav class="tabs" id="tabs">
@@ -2847,6 +2842,8 @@ async function loadHistory(){
   catch(e){ state.history = []; }
   try{ const a = localStorage.getItem('quiz-advanced-open'); if(a!==null){ state.advancedOpen = a==='true'; } }
   catch(e){ /* keep default */ }
+  try{ const c = localStorage.getItem('quiz-corp'); if(c && CORPS.includes(c)){ state.corp = c; } }
+  catch(e){ /* keep default */ }
 }
 function computeAttemptMap(){
   const map = {};
@@ -2891,14 +2888,12 @@ function buildCorpChips(){
   const box = document.getElementById('corpChips');
   box.innerHTML = CORPS.map(c=>{
     const lbl = c==="Todos" ? "Todos" : CORP_INFO[c].label;
-    return `<div class="chip ${c===state.corp?'active':''}" data-corp="${c}">${lbl}</div>`;
+    return `<option value="${c}" ${c===state.corp?'selected':''}>${lbl}</option>`;
   }).join('');
-  box.querySelectorAll('.chip').forEach(el=>{
-    el.addEventListener('click', ()=> selectCorp(el.dataset.corp));
-  });
 }
 function selectCorp(corp){
   state.corp = corp; state.disc = []; state.assunto = [];
+  try{ localStorage.setItem('quiz-corp', corp); }catch(e){ /* ignore */ }
   applyTheme(state.corp);
   buildCorpChips(); renderQfPanel(); buildQueue(); renderQuiz(); renderReview(); renderStats(); renderMeta(); renderLeitura(); renderTeoria();
 }
