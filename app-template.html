@@ -540,22 +540,18 @@
       </label>
     </div>
 
-    <div class="section-title">Conectar a um banco de dados externo</div>
-    <p class="cfg-p">Para sincronizar seu progresso entre dispositivos ou guardá-lo em seu próprio banco de dados, informe abaixo o endpoint de uma API REST compatível (por exemplo, um projeto Supabase, um endpoint próprio, ou qualquer serviço que aceite GET/POST em JSON). O app enviará o histórico de respostas para essa URL.</p>
+    <div class="section-title">Sincronizar progresso entre aparelhos</div>
+    <p class="cfg-p">Crie um código de perfil (um apelido só seu) e use o MESMO código em todos os seus aparelhos: o histórico de respostas passa a ser enviado e buscado automaticamente, sem precisar exportar/importar arquivo.</p>
     <div class="cfg-form">
-      <label class="cfg-label">URL da API (endpoint REST)</label>
-      <input class="cfg-input" id="dbUrl" placeholder="https://seuprojeto.supabase.co/rest/v1/historico">
-      <label class="cfg-label">Chave / Token de autenticação (opcional)</label>
-      <input class="cfg-input" id="dbKey" placeholder="anon key / API key / Bearer token">
+      <label class="cfg-label">Seu código de perfil</label>
+      <input class="cfg-input" id="profileIdInput" placeholder="ex.: edimilson-pmma-2026">
       <div class="cfg-row">
-        <button class="cfg-btn" onclick="saveDbConfig()">Salvar conexão</button>
-        <button class="cfg-btn" onclick="testDbConnection()">Testar conexão</button>
-        <button class="cfg-btn" onclick="syncToDb()">Enviar progresso agora</button>
+        <button class="cfg-btn" onclick="saveProfileId()">Salvar e sincronizar</button>
       </div>
-      <div id="dbStatus" class="cfg-status"></div>
+      <div id="profileStatus" class="cfg-status"></div>
     </div>
     <div class="disclaimer" style="margin-top:18px;">
-      Observação: por serem regras de segurança do navegador (CORS), a conexão só funcionará se a API informada permitir chamadas a partir desta página. Serviços como Supabase, Firebase ou uma API própria configurada para aceitar requisições externas costumam funcionar; endpoints internos/privados podem bloquear a chamada.
+      Observação: este app não tem sistema de login. O código de perfil é só uma forma simples de identificar "o mesmo perfil" entre aparelhos — qualquer pessoa que souber o código poderia, em tese, ler ou alterar esse histórico de respostas. Não é um dado sensível, mas, por segurança, não reutilize senhas nem informações pessoais como código.
     </div>
   </section>
 
@@ -584,7 +580,19 @@ const CORP_INFO = {
 const CORPS = ["Todos","PM","BM","PC"];
 const LETTERS = ["A","B","C","D","E"];
 
-let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas" };
+let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas", profileId:"" };
+
+// Projeto Supabase proprio deste app -- usado so pra sincronizar o
+// historico de respostas entre aparelhos (tabela user_progress, com
+// leitura/escrita publicas via "codigo de perfil", ver Config). A
+// chave abaixo e a "publishable" (equivalente a anon key), segura pra
+// uso no cliente -- nao da acesso alem do que as policies de RLS da
+// tabela permitem.
+const SUPABASE_URL = "https://ftgyvdefrncxexrkunzk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_CsN3yBA4q5BR5JmbTyigkg_HBg4-wrY";
+function supaHeaders(extra){
+  return Object.assign({ apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }, extra||{});
+}
 
 const LAW_6513 = [
 {"t":"tit","x":"LEI Nº 6.513, DE 30 DE NOVEMBRO DE 1995 — Estatuto dos Policiais-Militares da Polícia Militar do Maranhão"},
@@ -1851,6 +1859,8 @@ async function loadHistory(){
   catch(e){ /* keep default */ }
   try{ const c = localStorage.getItem('quiz-corp'); if(c && CORPS.includes(c)){ state.corp = c; } }
   catch(e){ /* keep default */ }
+  try{ const p = localStorage.getItem('profile-id'); if(p){ state.profileId = p; } }
+  catch(e){ /* keep default */ }
 }
 function computeAttemptMap(){
   const map = {};
@@ -1869,6 +1879,54 @@ function qfStatusOk(q){
 async function saveHistory(){
   try{ localStorage.setItem('quiz-history-v2', JSON.stringify(state.history)); }
   catch(e){ console.error('storage save failed', e); }
+  pushProgress(); // envio em segundo plano, nao bloqueia a interface nem trava se falhar
+}
+function mergeHistory(a, b){
+  const map = new Map();
+  (a||[]).forEach(h => map.set(h.id + '_' + h.ts, h));
+  (b||[]).forEach(h => map.set(h.id + '_' + h.ts, h));
+  return [...map.values()].sort((x,y)=> x.ts - y.ts);
+}
+async function pullProgress(){
+  if(!state.profileId) return;
+  try{
+    const url = `${SUPABASE_URL}/rest/v1/user_progress?profile_id=eq.${encodeURIComponent(state.profileId)}&select=history`;
+    const res = await fetch(url, { headers: supaHeaders() });
+    if(!res.ok) return;
+    const rows = await res.json();
+    const remote = rows && rows[0] && Array.isArray(rows[0].history) ? rows[0].history : [];
+    const merged = mergeHistory(state.history, remote);
+    if(merged.length !== state.history.length){
+      state.history = merged;
+      state.attemptMap = computeAttemptMap();
+      try{ localStorage.setItem('quiz-history-v2', JSON.stringify(state.history)); }catch(e){}
+      buildQueue(); renderQuiz(); renderStats(); renderReview();
+    }
+  }catch(e){ console.warn('pullProgress falhou (offline ou perfil ainda sem dados remotos):', e); }
+}
+async function pushProgress(){
+  if(!state.profileId) return;
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/user_progress`, {
+      method: "POST",
+      headers: supaHeaders({ "Content-Type":"application/json", "Prefer":"resolution=merge-duplicates" }),
+      body: JSON.stringify({ profile_id: state.profileId, history: state.history, updated_at: new Date().toISOString() })
+    });
+  }catch(e){ console.warn('pushProgress falhou (offline?):', e); }
+}
+function setProfileStatus(msg, kind){
+  const el = document.getElementById('profileStatus');
+  if(el){ el.textContent = msg; el.className = "cfg-status " + (kind||""); }
+}
+async function saveProfileId(){
+  const id = document.getElementById('profileIdInput').value.trim();
+  if(!id){ setProfileStatus("Digite um código de perfil.", "err"); return; }
+  state.profileId = id;
+  try{ localStorage.setItem('profile-id', id); }catch(e){}
+  setProfileStatus("Sincronizando...", "pending");
+  await pullProgress();
+  await pushProgress();
+  setProfileStatus("Perfil salvo — progresso sincronizado neste aparelho. Use o mesmo código nos demais.", "ok");
 }
 async function resetProgress(){
   if(!confirm("Tem certeza que deseja apagar todo o histórico de respostas e estatísticas?")) return;
@@ -2656,64 +2714,11 @@ function setupTabs(){
   });
 }
 
-// ---------- config / external database ----------
-async function loadDbConfig(){
-  try{
-    const v = localStorage.getItem('db-config');
-    if(v){ return JSON.parse(v); }
-  }catch(e){}
-  return {url:"", key:""};
-}
+// ---------- config / sincronizacao de progresso ----------
 async function renderConfig(){
-  const cfg = await loadDbConfig();
-  document.getElementById('dbUrl').value = cfg.url || "";
-  document.getElementById('dbKey').value = cfg.key || "";
-  document.getElementById('dbStatus').textContent = "";
-  document.getElementById('dbStatus').className = "cfg-status";
-}
-async function saveDbConfig(){
-  const url = document.getElementById('dbUrl').value.trim();
-  const key = document.getElementById('dbKey').value.trim();
-  try{
-    localStorage.setItem('db-config', JSON.stringify({url,key}));
-    setDbStatus("Conexão salva neste dispositivo.", "ok");
-  }catch(e){
-    setDbStatus("Não foi possível salvar a conexão.", "err");
-  }
-}
-function setDbStatus(msg, kind){
-  const el = document.getElementById('dbStatus');
-  el.textContent = msg; el.className = "cfg-status " + (kind||"");
-}
-async function testDbConnection(){
-  const url = document.getElementById('dbUrl').value.trim();
-  const key = document.getElementById('dbKey').value.trim();
-  if(!url){ setDbStatus("Informe a URL da API antes de testar.", "err"); return; }
-  setDbStatus("Testando conexão...", "pending");
-  try{
-    const headers = {};
-    if(key){ headers["apikey"] = key; headers["Authorization"] = "Bearer " + key; }
-    const res = await fetch(url, {method:"GET", headers});
-    if(res.ok){ setDbStatus("Conexão bem-sucedida (status " + res.status + ").", "ok"); }
-    else{ setDbStatus("A API respondeu com status " + res.status + ". Verifique a URL/chave.", "err"); }
-  }catch(e){
-    setDbStatus("Falha ao conectar (bloqueio de CORS ou URL inválida). Veja a observação abaixo.", "err");
-  }
-}
-async function syncToDb(){
-  const url = document.getElementById('dbUrl').value.trim();
-  const key = document.getElementById('dbKey').value.trim();
-  if(!url){ setDbStatus("Informe e salve a URL da API antes de enviar.", "err"); return; }
-  setDbStatus("Enviando progresso...", "pending");
-  try{
-    const headers = {"Content-Type":"application/json"};
-    if(key){ headers["apikey"] = key; headers["Authorization"] = "Bearer " + key; }
-    const res = await fetch(url, {method:"POST", headers, body: JSON.stringify({history: state.history, sentAt: Date.now()})});
-    if(res.ok){ setDbStatus("Progresso enviado com sucesso (status " + res.status + ").", "ok"); }
-    else{ setDbStatus("A API recusou o envio (status " + res.status + ").", "err"); }
-  }catch(e){
-    setDbStatus("Falha ao enviar (bloqueio de CORS ou URL inválida).", "err");
-  }
+  const pIn = document.getElementById('profileIdInput');
+  if(pIn) pIn.value = state.profileId || "";
+  setProfileStatus("", "");
 }
 function exportData(){
   const blob = new Blob([JSON.stringify(state.history, null, 2)], {type:"application/json"});
@@ -2743,6 +2748,7 @@ async function init(){
   applyTheme(state.corp);
   buildCorpChips(); renderMeta(); setupTabs();
   buildQueue(); renderQuiz(); renderStats(); renderReview();
+  pullProgress(); // puxa e mescla o progresso remoto, se houver codigo de perfil salvo
 }
 init();
 
