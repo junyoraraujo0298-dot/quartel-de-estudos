@@ -73,6 +73,7 @@ TEORIA_INGLES = extract_const_array('TEORIA_INGLES')
 TEORIA_RACIOCINIO_LOGICO = extract_const_array('TEORIA_RACIOCINIO_LOGICO')
 TEORIA_PRIMEIROS_SOCORROS = extract_const_array('TEORIA_PRIMEIROS_SOCORROS')
 TEORIA_COMBATE_INCENDIO = extract_const_array('TEORIA_COMBATE_INCENDIO')
+TEORIA_CRONOGRAMA_PC = extract_const_array('TEORIA_CRONOGRAMA_PC')
 LAW_COMPARISON = extract_law_comparison()
 FLASHCARDS = extract_const_array('FLASHCARDS')
 HIST_MA_LESSON = extract_const_array('HIST_MA_LESSON')
@@ -86,6 +87,7 @@ for name, arr in [('LAW_6513', LAW_6513), ('LEI_12896', LEI_12896), ('LAW_14751'
                    ('TEORIA_RACIOCINIO_LOGICO', TEORIA_RACIOCINIO_LOGICO),
                    ('TEORIA_PRIMEIROS_SOCORROS', TEORIA_PRIMEIROS_SOCORROS),
                    ('TEORIA_COMBATE_INCENDIO', TEORIA_COMBATE_INCENDIO),
+                   ('TEORIA_CRONOGRAMA_PC', TEORIA_CRONOGRAMA_PC),
                    ('LAW_COMPARISON', LAW_COMPARISON), ('FLASHCARDS', FLASHCARDS),
                    ('HIST_MA_LESSON', HIST_MA_LESSON), ('HIST_MA_CARDS', HIST_MA_CARDS)]:
     print(f'  {name}: {len(arr)} itens')
@@ -105,6 +107,7 @@ DECKS = {
     'teoria_socorros':("Primeiros Socorros (BMMA)", 'teoria', None, TEORIA_PRIMEIROS_SOCORROS),
     'teoria_incendio':("Combate a Incêndio (BMMA)", 'teoria', None, TEORIA_COMBATE_INCENDIO),
     'teoria_historia':("História do Maranhão", 'teoria', None, HIST_MA_LESSON),
+    'teoria_cronograma_pc': ("Edital e Cronograma — PC Agente de Polícia", 'teoria', None, TEORIA_CRONOGRAMA_PC),
     'flash_6513':     ("Lei 6.513/95 (pergunta e resposta)", 'flashcard', 'quiz', FLASHCARDS),
     'flash_historia': ("História do Maranhão (leitura)", 'flashcard', 'read', HIST_MA_CARDS),
 }
