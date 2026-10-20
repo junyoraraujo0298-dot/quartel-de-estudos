@@ -107,7 +107,7 @@ DECKS = {
     'teoria_socorros':("Primeiros Socorros (BMMA)", 'teoria', None, TEORIA_PRIMEIROS_SOCORROS),
     'teoria_incendio':("Combate a Incêndio (BMMA)", 'teoria', None, TEORIA_COMBATE_INCENDIO),
     'teoria_historia':("História do Maranhão", 'teoria', None, HIST_MA_LESSON),
-    'teoria_cronograma_pc': ("Edital e Cronograma — PC Agente de Polícia", 'teoria', None, TEORIA_CRONOGRAMA_PC),
+    'estrategia_cronograma_pc': ("Edital e Cronograma — PC Agente de Polícia", 'estrategia', None, TEORIA_CRONOGRAMA_PC),
     'flash_6513':     ("Lei 6.513/95 (pergunta e resposta)", 'flashcard', 'quiz', FLASHCARDS),
     'flash_historia': ("História do Maranhão (leitura)", 'flashcard', 'read', HIST_MA_CARDS),
 }

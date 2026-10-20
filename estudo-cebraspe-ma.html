@@ -368,6 +368,7 @@
     <button data-tab="stats">Estatísticas</button>
     <button data-tab="leitura">Legislação</button>
     <button data-tab="teoria">Teoria</button>
+    <button data-tab="estrategia">Estratégia</button>
     <button data-tab="flash">Flashcards</button>
     <button data-tab="comic">Quadrinhos MA</button>
     <button data-tab="config">Config</button>
@@ -501,6 +502,15 @@
       <span class="bank-note" id="teoriaCount"></span>
     </div>
     <div id="teoriaList" class="law-list"></div>
+  </section>
+
+  <section id="tab-estrategia" style="display:none;">
+    <div class="deck-row" id="estrategiaDeckRow"></div>
+    <div class="law-toolbar">
+      <input type="text" id="estrategiaSearch" class="cfg-input" placeholder="Buscar por tópico ou palavra-chave..." oninput="renderEstrategia()">
+      <span class="bank-note" id="estrategiaCount"></span>
+    </div>
+    <div id="estrategiaList" class="law-list"></div>
   </section>
 
   <section id="tab-flash" style="display:none;">
@@ -2682,12 +2692,16 @@ const TEORIA_DECKS = {
   logica: { label: "Raciocínio Lógico", data: TEORIA_RACIOCINIO_LOGICO, corp: null },
   socorros: { label: "Primeiros Socorros (BMMA)", data: TEORIA_PRIMEIROS_SOCORROS, corp: "BM" },
   incendio: { label: "Combate a Incêndio (BMMA)", data: TEORIA_COMBATE_INCENDIO, corp: "BM" },
-  hist: { label: "História do Maranhão", data: HIST_MA_LESSON, corp: null },
+  hist: { label: "História do Maranhão", data: HIST_MA_LESSON, corp: null }
+};
+
+const ESTRATEGIA_DECKS = {
   cronograma_pc: { label: "Edital e Cronograma — PC Agente de Polícia", data: TEORIA_CRONOGRAMA_PC, corp: "PC" }
 };
 
 state.leituraDeck = "lei";
 state.teoriaDeck = "portugues";
+state.estrategiaDeck = "cronograma_pc";
 let flashState = { deck: "lei", order: FLASHCARDS.map((_,i)=>i), idx: 0, flipped: false };
 
 const COMIC_SCENES = {
@@ -3618,6 +3632,47 @@ function renderTeoria(){
   }).join('');
 }
 
+function visibleEstrategiaDecks(){
+  const out = {};
+  Object.keys(ESTRATEGIA_DECKS).forEach(k=>{
+    const d = ESTRATEGIA_DECKS[k];
+    if(!d.corp || state.corp==="Todos" || d.corp===state.corp) out[k] = d;
+  });
+  return out;
+}
+function setEstrategiaDeck(key){
+  state.estrategiaDeck = key;
+  document.getElementById('estrategiaSearch').value = '';
+  renderEstrategia();
+}
+function renderEstrategia(){
+  const decks = visibleEstrategiaDecks();
+  if(!decks[state.estrategiaDeck]) state.estrategiaDeck = Object.keys(decks)[0];
+  buildDeckRow('estrategiaDeckRow', decks, state.estrategiaDeck, setEstrategiaDeck);
+  const deck = decks[state.estrategiaDeck] ? decks[state.estrategiaDeck].data : [];
+  const list = document.getElementById('estrategiaList');
+  const q = document.getElementById('estrategiaSearch').value.trim().toLowerCase();
+  const items = deck.filter(it=>{
+    if(!q) return true;
+    if(it.t==='art') return (it.n||'').toLowerCase().includes(q) || it.x.toLowerCase().includes(q) || (it.s||'').toLowerCase().includes(q);
+    return it.x.toLowerCase().includes(q);
+  });
+  document.getElementById('estrategiaCount').textContent = q ? `${items.length} resultado(s)` : `${deck.filter(i=>i.t==='art').length} tópicos`;
+  if(items.length===0){
+    list.innerHTML = `<div class="law-empty">${deck.length===0 ? 'Conteúdo em preparação — volte em breve.' : 'Nenhum resultado para "'+escapeHtml(q)+'".'}</div>`;
+    return;
+  }
+  list.innerHTML = items.map(it=>{
+    const txt = escapeHtml(it.x).replace(/\n/g,'<br>');
+    if(it.t==='tit') return `<div class="law-tit">${txt}</div>`;
+    if(it.t==='cap') return `<div class="law-cap">${txt}</div>`;
+    if(it.t==='sec') return `<div class="law-sec">${txt}</div>`;
+    const sceneBlock = (it.img && TEORIA_SCENES[it.img]) ? `<div class="law-scene">${TEORIA_SCENES[it.img]}</div>` : '';
+    const simpleBlock = it.s ? `<div class="law-simple"><span class="law-simple-lab">💡 Pegadinha / dica rápida</span><div class="law-simple-txt">${escapeHtml(it.s)}</div></div>` : '';
+    return `<div class="law-art">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span><div class="law-txt">${txt}</div>${simpleBlock}</div>`;
+  }).join('');
+}
+
 function setFlashDeck(key){
   flashState.deck = key;
   flashState.order = FLASH_DECKS[key].data.map((_,i)=>i);
@@ -3708,6 +3763,7 @@ function activateTab(tab){
   document.getElementById('tab-stats').style.display = tab==='stats' ? 'block':'none';
   document.getElementById('tab-leitura').style.display = tab==='leitura' ? 'block':'none';
   document.getElementById('tab-teoria').style.display = tab==='teoria' ? 'block':'none';
+  document.getElementById('tab-estrategia').style.display = tab==='estrategia' ? 'block':'none';
   document.getElementById('tab-flash').style.display = tab==='flash' ? 'block':'none';
   document.getElementById('tab-comic').style.display = tab==='comic' ? 'block':'none';
   document.getElementById('tab-config').style.display = tab==='config' ? 'block':'none';
@@ -3716,6 +3772,7 @@ function activateTab(tab){
   if(tab==='stats') renderStats();
   if(tab==='leitura') renderLeitura();
   if(tab==='teoria') renderTeoria();
+  if(tab==='estrategia') renderEstrategia();
   if(tab==='flash') renderFlash();
   if(tab==='comic') renderComic();
   if(tab==='config') renderConfig();
