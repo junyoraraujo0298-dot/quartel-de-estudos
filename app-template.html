@@ -1338,8 +1338,9 @@ const TEORIA_COMBATE_INCENDIO = [
 {"t": "art", "n": "Flashover x Backdraft — não confundir", "x": "Flashover: ocorre em ambiente que ainda tem alguma troca de ar (chamas já visíveis, pirólise, fumaça se acumulando e se espalhando), representando a generalização SÚBITA de um incêndio que já estava se desenvolvendo. Backdraft: ocorre em ambiente totalmente FECHADO/confinado, sem chamas visíveis (muitas vezes só fumaça saindo por frestas), e é DESENCADEADO pela entrada repentina de oxigênio que faltava — ou seja, o oxigênio é a peça que estava ausente e completa o tetraedro do fogo.", "s": "Pergunta clássica de prova: \"ao abrir a porta de um cômodo esfumaçado sem chamas visíveis, o fenômeno que pode ocorrer é...\" → BACKDRAFT (faltava oxigênio). Já \"o incêndio que já estava com chamas generalizou repentinamente\" → FLASHOVER (ambiente já tinha alguma ventilação/combustão ativa)."}
 ];
 
-const TEORIA_CRONOGRAMA_PC = [
-{"t": "tit", "x": "EDITAL E CRONOGRAMA DE ESTUDOS — PCMA: CARGO DE AGENTE DE POLÍCIA"},
+const CRONOGRAMA_PCPE = [
+{"t": "tit", "x": "EDITAL E CRONOGRAMA DE ESTUDOS — PC-PE (PERNAMBUCO): CARGO DE AGENTE DE POLÍCIA"},
+{"t": "art", "n": "Atenção: isto é da PC-PE, não da PCMA", "x": "Este cronograma usa como base o edital e a estrutura de prova da PC-PE (Pernambuco), não da PCMA (Maranhão) — está aqui como referência de método de estudo (como organizar um ciclo semanal, como interpretar peso de disciplina x tempo de estudo). As disciplinas, pesos e notas de corte da PCMA podem ser diferentes quando o edital de Maranhão sair.", "s": "Quando sair o edital oficial da PCMA, os números de questões por disciplina e as notas de corte devem ser ajustados — o que vale como modelo aqui é o MÉTODO (ciclo semanal, fases de estudo), não os números específicos da PE."},
 {"t": "cap", "x": "O Que o Edital Informa (Estrutura da Prova Objetiva)"},
 {"t": "art", "n": "Distribuição oficial por prova", "x": "O edital divide a prova objetiva em apenas duas provas, sem detalhar por disciplina: P1 — Noções de Direito: 20 questões (33,3% da prova); P2 — Conhecimentos Específicos: 40 questões (66,7% da prova). Total: 60 questões (100%).", "s": "Os Conhecimentos Específicos valem o DOBRO do Direito. Juntas, Português, Informática, Raciocínio Lógico, Contabilidade e Estatística pesam mais que todo o bloco de Direito — não subestime essas matérias só porque não soam \"jurídicas\"."},
 {"t": "cap", "x": "Estimativa de Questões por Disciplina (Não É Oficial)"},
@@ -1709,12 +1710,12 @@ const TEORIA_DECKS = {
 };
 
 const ESTRATEGIA_DECKS = {
-  cronograma_pc: { label: "Edital e Cronograma — PC Agente de Polícia", data: TEORIA_CRONOGRAMA_PC, corp: "PC" }
+  cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: null }
 };
 
 state.leituraDeck = "lei";
 state.teoriaDeck = "portugues";
-state.estrategiaDeck = "cronograma_pc";
+state.estrategiaDeck = "cronograma_pcpe";
 let flashState = { deck: "lei", order: FLASHCARDS.map((_,i)=>i), idx: 0, flipped: false };
 
 const COMIC_SCENES = {
