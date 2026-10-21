@@ -253,6 +253,12 @@
     text-transform:uppercase;color:var(--gold-deep);display:block;margin-bottom:3px;}
   .law-simple .law-simple-txt{font-family:'Source Serif 4',serif;font-size:13px;line-height:1.55;
     color:var(--ink);}
+  .law-table-wrap{overflow-x:auto;margin:2px 0 4px;}
+  .law-table{border-collapse:collapse;width:100%;min-width:420px;font-family:'Source Serif 4',serif;font-size:13px;}
+  .law-table th,.law-table td{border:1px solid var(--navy-3);padding:6px 10px;text-align:left;vertical-align:top;}
+  .law-table th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.5px;text-transform:uppercase;
+    color:var(--gold-deep);background:rgba(166,121,15,0.08);}
+  .law-table td{color:var(--accent-txt);}
   .law-scene{width:100%;max-width:260px;height:110px;margin:0 0 10px;padding:8px;
     background:#FFFFFF;border:1px solid var(--navy-3);border-radius:8px;overflow:hidden;}
   .law-scene svg{width:100%;height:100%;display:block;}
@@ -2336,7 +2342,7 @@ const TEORIA_CRONOGRAMA_PC = [
 {"t": "cap", "x": "Ciclo Semanal de Estudos (16h por semana)"},
 {"t": "art", "n": "Premissas do ciclo", "x": "Tempo disponível: 5 dias úteis × 2h = 10h, mais 6h no fim de semana (3h por dia), totalizando 16h por semana. Prazo: de 19/10/2026 até a prova em 7/3/2027 são cerca de 20 semanas, ou aproximadamente 320h de estudo. Os pesos usados seguem a estimativa de disciplinas do tópico anterior.", "s": "Se o fim de semana virar 6h POR DIA (12h no total), o ciclo semanal sobe pra 22h e a tabela de horas por disciplina precisa ser refeita proporcionalmente."},
 {"t": "art", "n": "Horas por disciplina no ciclo (16h)", "x": "Língua Portuguesa: 3h (18,8%). Raciocínio Lógico: 2h (12,5%). Informática: 1h30 (9,4%). Direito Penal: 1h30 (9,4%). Direito Processual Penal: 1h30 (9,4%). Direito Constitucional: 1h30 (9,4%). Legislação Estadual: 1h30 (9,4%). Contabilidade Geral: 1h (6,3%). Direito Administrativo: 1h (6,3%). Redação e Atualidades: 1h (6,3%). Estatística: 0h30 (3,1%). Total: 16h (100%)."},
-{"t": "art", "n": "Distribuição por dia da semana", "x": "Segunda (2h): Português (1h) + Constitucional (1h). Terça (2h): Raciocínio Lógico (1h) + Penal (1h). Quarta (2h): Português (1h) + Legislação Estadual (1h). Quinta (2h): Processual Penal (1h) + Informática (1h). Sexta (2h): Raciocínio Lógico (1h) + Administrativo (1h). Sábado (3h): Português (1h) + Contabilidade (1h) + Estatística (30min) + Informática (30min). Domingo (3h): Redação (1h) + Penal (30min) + Processual Penal (30min) + Constitucional (30min) + Legislação Estadual (30min).", "s": "Se a rotina atrapalhar e um dia não der pra estudar, NÃO pule a matéria do dia — passe pro próximo bloco do ciclo e mantenha a ordem, sem tentar \"compensar\" tudo de uma vez depois."},
+{"t": "art", "n": "Distribuição por dia da semana", "x": "Segunda (2h): Português (1h) + Constitucional (1h). Terça (2h): Raciocínio Lógico (1h) + Penal (1h). Quarta (2h): Português (1h) + Legislação Estadual (1h). Quinta (2h): Processual Penal (1h) + Informática (1h). Sexta (2h): Raciocínio Lógico (1h) + Administrativo (1h). Sábado (3h): Português (1h) + Contabilidade (1h) + Estatística (30min) + Informática (30min). Domingo (3h): Redação (1h) + Penal (30min) + Processual Penal (30min) + Constitucional (30min) + Legislação Estadual (30min).", "s": "Se a rotina atrapalhar e um dia não der pra estudar, NÃO pule a matéria do dia — passe pro próximo bloco do ciclo e mantenha a ordem, sem tentar \"compensar\" tudo de uma vez depois.", "tbl": [["Dia", "Horas", "Blocos de estudo"], ["Segunda", "2h", "Português (1h) + Constitucional (1h)"], ["Terça", "2h", "Raciocínio Lógico (1h) + Penal (1h)"], ["Quarta", "2h", "Português (1h) + Legislação Estadual (1h)"], ["Quinta", "2h", "Processual Penal (1h) + Informática (1h)"], ["Sexta", "2h", "Raciocínio Lógico (1h) + Administrativo (1h)"], ["Sábado", "3h", "Português (1h) + Contabilidade (1h) + Estatística (30min) + Informática (30min)"], ["Domingo", "3h", "Redação (1h) + Penal (30min) + Processual Penal (30min) + Constitucional (30min) + Legislação Estadual (30min)"]]},
 {"t": "cap", "x": "Fases Até a Prova (19/10/2026 a 7/3/2027)"},
 {"t": "art", "n": "Fase 1 — Base (semanas 1 a 10, 19/10 a 27/12)", "x": "Foco: 60% teoria e 40% questões. Primeira passada em todo o edital, com resumos curtos de cada disciplina."},
 {"t": "art", "n": "Fase 2 — Questões (semanas 11 a 17, 28/12 a 14/2)", "x": "Foco: 30% teoria e 70% questões no estilo CEBRASPE. Revisão dos erros cometidos e aprofundamento na lei seca estadual."},
@@ -3628,6 +3634,10 @@ function renderTeoria(){
     if(it.t==='sec') return `<div class="law-sec">${txt}</div>`;
     const sceneBlock = (it.img && TEORIA_SCENES[it.img]) ? `<div class="law-scene">${TEORIA_SCENES[it.img]}</div>` : '';
     const simpleBlock = it.s ? `<div class="law-simple"><span class="law-simple-lab">💡 Pegadinha / dica rápida</span><div class="law-simple-txt">${escapeHtml(it.s)}</div></div>` : '';
+    if(it.tbl){
+      const tableBlock = `<div class="law-table-wrap"><table class="law-table"><thead><tr>${it.tbl[0].map(h=>`<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${it.tbl.slice(1).map(row=>`<tr>${row.map(c=>`<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      return `<div class="law-art">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span>${tableBlock}${simpleBlock}</div>`;
+    }
     return `<div class="law-art">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span><div class="law-txt">${txt}</div>${simpleBlock}</div>`;
   }).join('');
 }
@@ -3669,6 +3679,10 @@ function renderEstrategia(){
     if(it.t==='sec') return `<div class="law-sec">${txt}</div>`;
     const sceneBlock = (it.img && TEORIA_SCENES[it.img]) ? `<div class="law-scene">${TEORIA_SCENES[it.img]}</div>` : '';
     const simpleBlock = it.s ? `<div class="law-simple"><span class="law-simple-lab">💡 Pegadinha / dica rápida</span><div class="law-simple-txt">${escapeHtml(it.s)}</div></div>` : '';
+    if(it.tbl){
+      const tableBlock = `<div class="law-table-wrap"><table class="law-table"><thead><tr>${it.tbl[0].map(h=>`<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${it.tbl.slice(1).map(row=>`<tr>${row.map(c=>`<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      return `<div class="law-art">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span>${tableBlock}${simpleBlock}</div>`;
+    }
     return `<div class="law-art">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span><div class="law-txt">${txt}</div>${simpleBlock}</div>`;
   }).join('');
 }
