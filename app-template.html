@@ -591,9 +591,10 @@ const QUESTIONS = __QUESTIONS_JSON__;
 const CORP_INFO = {
   "PM": {label:"PMMA", full:"Polícia Militar do Maranhão", tipo:"CE"},
   "BM": {label:"BMMA", full:"Corpo de Bombeiros Militar do Maranhão", tipo:"MC"},
-  "PC": {label:"PCMA", full:"Polícia Civil do Maranhão", tipo:"MC"}
+  "PC": {label:"PCMA", full:"Polícia Civil do Maranhão", tipo:"MC"},
+  "PCPE": {label:"PC-PE", full:"Polícia Civil de Pernambuco", tipo:"MC"}
 };
-const CORPS = ["Todos","PM","BM","PC"];
+const CORPS = ["Todos","PM","BM","PC","PCPE"];
 const LETTERS = ["A","B","C","D","E"];
 
 let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas", profileId:"" };
@@ -1801,9 +1802,9 @@ const TEORIA_DECKS = {
 };
 
 const ESTRATEGIA_DECKS = {
-  cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: null },
-  constituicao_pe: { label: "Constituição de PE (trechos) — Segurança Pública e Administração", data: LAW_PE_CONSTITUICAO, corp: null },
-  estatuto_policial_pe: { label: "Estatuto do Policial Civil de PE (Lei 6.425/1972)", data: LAW_PE_ESTATUTO_POLICIAL, corp: null }
+  cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: "PCPE" },
+  constituicao_pe: { label: "Constituição de PE (trechos) — Segurança Pública e Administração", data: LAW_PE_CONSTITUICAO, corp: "PCPE" },
+  estatuto_policial_pe: { label: "Estatuto do Policial Civil de PE (Lei 6.425/1972)", data: LAW_PE_ESTATUTO_POLICIAL, corp: "PCPE" }
 };
 
 state.leituraDeck = "lei";
@@ -2221,6 +2222,10 @@ function renderQfPanel(){
 function renderMeta(){
   const box = document.getElementById('metaBar');
   if(state.corp==="Todos"){ box.innerHTML = `<span class="bank-note">Banco completo · ${QUESTIONS.length} questões</span>`; return; }
+  if(state.corp==="PCPE"){
+    box.innerHTML = `<span class="bank-note">Polícia Civil de Pernambuco — este app ainda não tem banco de questões próprio da PC-PE. Veja a aba Estratégia para o edital, cronograma, a Constituição de PE e o Estatuto do Policial Civil.</span>`;
+    return;
+  }
   const info = CORP_INFO[state.corp];
   const fmt = info.tipo==="CE" ? "Certo/Errado" : "Múltipla escolha (5 alternativas)";
   box.innerHTML = `<span class="bank-note">${info.full} — formato: ${fmt}</span>`;
