@@ -76,6 +76,7 @@ TEORIA_COMBATE_INCENDIO = extract_const_array('TEORIA_COMBATE_INCENDIO')
 CRONOGRAMA_PCPE = extract_const_array('CRONOGRAMA_PCPE')
 LAW_PE_CONSTITUICAO = extract_const_array('LAW_PE_CONSTITUICAO')
 LAW_PE_ESTATUTO_POLICIAL = extract_const_array('LAW_PE_ESTATUTO_POLICIAL')
+PROGRAMA_PCPE_AGENTE = extract_const_array('PROGRAMA_PCPE_AGENTE')
 LAW_COMPARISON = extract_law_comparison()
 FLASHCARDS = extract_const_array('FLASHCARDS')
 HIST_MA_LESSON = extract_const_array('HIST_MA_LESSON')
@@ -92,6 +93,7 @@ for name, arr in [('LAW_6513', LAW_6513), ('LEI_12896', LEI_12896), ('LAW_14751'
                    ('CRONOGRAMA_PCPE', CRONOGRAMA_PCPE),
                    ('LAW_PE_CONSTITUICAO', LAW_PE_CONSTITUICAO),
                    ('LAW_PE_ESTATUTO_POLICIAL', LAW_PE_ESTATUTO_POLICIAL),
+                   ('PROGRAMA_PCPE_AGENTE', PROGRAMA_PCPE_AGENTE),
                    ('LAW_COMPARISON', LAW_COMPARISON), ('FLASHCARDS', FLASHCARDS),
                    ('HIST_MA_LESSON', HIST_MA_LESSON), ('HIST_MA_CARDS', HIST_MA_CARDS)]:
     print(f'  {name}: {len(arr)} itens')
@@ -114,6 +116,7 @@ DECKS = {
     'estrategia_cronograma_pcpe': ("Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", 'estrategia', None, CRONOGRAMA_PCPE),
     'estrategia_constituicao_pe': ("Constituição de PE (trechos) — Segurança Pública e Administração", 'estrategia', None, LAW_PE_CONSTITUICAO),
     'estrategia_estatuto_policial_pe': ("Estatuto do Policial Civil de PE (Lei 6.425/1972)", 'estrategia', None, LAW_PE_ESTATUTO_POLICIAL),
+    'estrategia_programa_pcpe': ("Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", 'estrategia', None, PROGRAMA_PCPE_AGENTE),
     'flash_6513':     ("Lei 6.513/95 (pergunta e resposta)", 'flashcard', 'quiz', FLASHCARDS),
     'flash_historia': ("História do Maranhão (leitura)", 'flashcard', 'read', HIST_MA_CARDS),
 }
