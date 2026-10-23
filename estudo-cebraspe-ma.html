@@ -2814,15 +2814,15 @@ const TEORIA_DECKS = {
 };
 
 const ESTRATEGIA_DECKS = {
-  programa_pcpe: { label: "Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", data: PROGRAMA_PCPE_AGENTE, corp: "PCPE" },
   cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: "PCPE" },
+  programa_pcpe: { label: "Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", data: PROGRAMA_PCPE_AGENTE, corp: "PCPE" },
   constituicao_pe: { label: "Constituição de PE (trechos) — Segurança Pública e Administração", data: LAW_PE_CONSTITUICAO, corp: "PCPE" },
   estatuto_policial_pe: { label: "Estatuto do Policial Civil de PE (Lei 6.425/1972)", data: LAW_PE_ESTATUTO_POLICIAL, corp: "PCPE" }
 };
 
 state.leituraDeck = "lei";
 state.teoriaDeck = "portugues";
-state.estrategiaDeck = "programa_pcpe";
+state.estrategiaDeck = "cronograma_pcpe";
 let flashState = { deck: "lei", order: FLASHCARDS.map((_,i)=>i), idx: 0, flipped: false };
 
 const COMIC_SCENES = {
