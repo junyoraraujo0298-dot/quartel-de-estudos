@@ -79,6 +79,7 @@ LAW_PE_ESTATUTO_POLICIAL = extract_const_array('LAW_PE_ESTATUTO_POLICIAL')
 PROGRAMA_PCPE_AGENTE = extract_const_array('PROGRAMA_PCPE_AGENTE')
 TEORIA_DIREITO_PENAL_PCPE = extract_const_array('TEORIA_DIREITO_PENAL_PCPE')
 TEORIA_LINGUA_PORTUGUESA_PCPE = extract_const_array('TEORIA_LINGUA_PORTUGUESA_PCPE')
+TEORIA_INFORMATICA_WIN11_PCPE = extract_const_array('TEORIA_INFORMATICA_WIN11_PCPE')
 LAW_COMPARISON = extract_law_comparison()
 FLASHCARDS = extract_const_array('FLASHCARDS')
 HIST_MA_LESSON = extract_const_array('HIST_MA_LESSON')
@@ -98,6 +99,7 @@ for name, arr in [('LAW_6513', LAW_6513), ('LEI_12896', LEI_12896), ('LAW_14751'
                    ('PROGRAMA_PCPE_AGENTE', PROGRAMA_PCPE_AGENTE),
                    ('TEORIA_DIREITO_PENAL_PCPE', TEORIA_DIREITO_PENAL_PCPE),
                    ('TEORIA_LINGUA_PORTUGUESA_PCPE', TEORIA_LINGUA_PORTUGUESA_PCPE),
+                   ('TEORIA_INFORMATICA_WIN11_PCPE', TEORIA_INFORMATICA_WIN11_PCPE),
                    ('LAW_COMPARISON', LAW_COMPARISON), ('FLASHCARDS', FLASHCARDS),
                    ('HIST_MA_LESSON', HIST_MA_LESSON), ('HIST_MA_CARDS', HIST_MA_CARDS)]:
     print(f'  {name}: {len(arr)} itens')
@@ -123,6 +125,7 @@ DECKS = {
     'estrategia_programa_pcpe': ("Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", 'estrategia', None, PROGRAMA_PCPE_AGENTE),
     'teoria_direito_penal_pcpe': ("Direito Penal — Princípios (PC-PE)", 'teoria', None, TEORIA_DIREITO_PENAL_PCPE),
     'teoria_portugues_pcpe': ("Língua Portuguesa — Ortografia e Acentuação (PC-PE)", 'teoria', None, TEORIA_LINGUA_PORTUGUESA_PCPE),
+    'teoria_informatica_win11_pcpe': ("Informática — Sistema Operacional Windows 11 (PC-PE)", 'teoria', None, TEORIA_INFORMATICA_WIN11_PCPE),
     'flash_6513':     ("Lei 6.513/95 (pergunta e resposta)", 'flashcard', 'quiz', FLASHCARDS),
     'flash_historia': ("História do Maranhão (leitura)", 'flashcard', 'read', HIST_MA_CARDS),
 }
