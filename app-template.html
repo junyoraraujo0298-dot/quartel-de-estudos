@@ -506,6 +506,7 @@
     <div class="law-toolbar">
       <input type="text" id="teoriaSearch" class="cfg-input" placeholder="Buscar por tópico ou palavra-chave..." oninput="renderTeoria()">
       <span class="bank-note" id="teoriaCount"></span>
+      <button class="cfg-btn" id="teoriaPracticeBtn" onclick="practicarQuestoesDaTeoria()" style="display:none;"></button>
     </div>
     <div id="teoriaList" class="law-list"></div>
   </section>
@@ -1843,6 +1844,13 @@ const TEORIA_DECKS = {
   hist: { label: "História do Maranhão", data: HIST_MA_LESSON, corp: null },
   direito_penal_pcpe: { label: "Direito Penal — Princípios (PC-PE)", data: TEORIA_DIREITO_PENAL_PCPE, corp: "PCPE" }
 };
+// Liga cada deck de teoria ao "disc" exato das questões daquele assunto, pra
+// permitir pular direto da leitura pra praticar questões só dele. O filtro
+// de corp do próprio deck (quando houver) evita misturar com discs de mesmo
+// nome de outro corp (ex.: "Direito Penal" também existe na PCMA, mas em MC).
+const TEORIA_DECK_TO_DISC = {
+  direito_penal_pcpe: "Direito Penal"
+};
 
 const ESTRATEGIA_DECKS = {
   cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: "PCPE" },
@@ -2760,10 +2768,39 @@ function setTeoriaDeck(key){
   document.getElementById('teoriaSearch').value = '';
   renderTeoria();
 }
+function practicarQuestoesDaTeoria(){
+  const deckInfo = TEORIA_DECKS[state.teoriaDeck];
+  const disc = TEORIA_DECK_TO_DISC[state.teoriaDeck];
+  if(!disc) return;
+  state.corp = deckInfo.corp || "Todos";
+  state.disc = [disc];
+  state.assunto = [];
+  state.keyword = '';
+  state.modalidade = [];
+  state.qStatus = 'todas';
+  state.advancedOpen = true;
+  applyTheme(state.corp);
+  buildCorpChips();
+  activateTab('quiz');
+  buildQueue(); renderQuiz(); renderQfPanel();
+}
 function renderTeoria(){
   const decks = visibleTeoriaDecks();
   if(!decks[state.teoriaDeck]) state.teoriaDeck = Object.keys(decks)[0];
   buildDeckRow('teoriaDeckRow', decks, state.teoriaDeck, setTeoriaDeck);
+  const practiceBtn = document.getElementById('teoriaPracticeBtn');
+  const discDaTeoria = TEORIA_DECK_TO_DISC[state.teoriaDeck];
+  if(practiceBtn){
+    if(discDaTeoria){
+      const deckCorp = decks[state.teoriaDeck].corp;
+      const n = QUESTIONS.filter(q=>q.disc===discDaTeoria && (!deckCorp || q.corp===deckCorp)).length;
+      practiceBtn.style.display = 'inline-block';
+      practiceBtn.textContent = `📝 Praticar questões deste assunto (${n})`;
+      practiceBtn.disabled = n === 0;
+    } else {
+      practiceBtn.style.display = 'none';
+    }
+  }
   const deck = decks[state.teoriaDeck].data;
   const list = document.getElementById('teoriaList');
   const q = document.getElementById('teoriaSearch').value.trim().toLowerCase();
