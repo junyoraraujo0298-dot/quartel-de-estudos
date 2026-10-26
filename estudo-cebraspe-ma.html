@@ -154,6 +154,7 @@
   .review-item .rtags{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
   .review-item .renun{font-size:14px;line-height:1.55;margin-bottom:8px;}
   .review-item .rexp{font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--paper-line);padding-top:8px;}
+  .review-item .rstudy-btn{display:inline-block;margin-top:10px;font-size:12px;padding:6px 12px;}
   .empty-note{text-align:center;color:var(--muted);padding:50px 20px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
     border:1px dashed var(--navy-3);border-radius:8px;}
   .reset-link{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted-2);text-align:center;margin-top:30px;cursor:pointer;
@@ -370,7 +371,7 @@
 
   <nav class="tabs" id="tabs">
     <button data-tab="quiz" class="active">Simulado</button>
-    <button data-tab="review">Revisão de erros</button>
+    <button data-tab="review">Revisão</button>
     <button data-tab="stats">Estatísticas</button>
     <button data-tab="leitura">Legislação</button>
     <button data-tab="teoria">Teoria</button>
@@ -3044,6 +3045,27 @@ const TEORIA_DECK_TO_DISC = {
   portugues_pcpe: "Língua Portuguesa",
   informatica_win11_pcpe: "Informática"
 };
+// Mapa inverso disc -> aula, juntando Legislação e Teoria, pra permitir que a
+// Revisão (erros e revisão espaçada) ofereça um link direto "Ver aula" sem
+// duplicar as duas listas acima.
+const DISC_TO_STUDY_LINK = {};
+Object.keys(LEITURA_DECK_TO_DISC).forEach(k=>{ DISC_TO_STUDY_LINK[LEITURA_DECK_TO_DISC[k]] = {tab:'leitura', deck:k}; });
+Object.keys(TEORIA_DECK_TO_DISC).forEach(k=>{ DISC_TO_STUDY_LINK[TEORIA_DECK_TO_DISC[k]] = {tab:'teoria', deck:k}; });
+function goStudyTopic(disc, term){
+  const link = DISC_TO_STUDY_LINK[disc];
+  if(!link) return;
+  if(link.tab === 'leitura'){
+    state.leituraDeck = link.deck;
+    activateTab('leitura');
+    const input = document.getElementById('lawSearch');
+    if(input){ input.value = term || ''; renderLeitura(); }
+  } else {
+    state.teoriaDeck = link.deck;
+    activateTab('teoria');
+    const input = document.getElementById('teoriaSearch');
+    if(input){ input.value = term || ''; renderTeoria(); }
+  }
+}
 
 const ESTRATEGIA_DECKS = {
   cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: "PCPE" },
@@ -3670,28 +3692,71 @@ function renderPager(){
   box.innerHTML = html;
 }
 
+// Intervalos da curva de esquecimento de Ebbinghaus, em dias, contados a
+// partir da última resposta CERTA de cada questão. A cada acerto novo, avança
+// pro próximo intervalo; qualquer erro zera o ciclo (a questão some da
+// revisão espaçada e passa a aparecer na lista de Erros, abaixo).
+const SPACED_REVIEW_INTERVALS_DIAS = [1, 2, 4, 7, 15, 30];
+function spacedReviewDue(){
+  const byId = {};
+  state.history.forEach(h=>{ (byId[h.id] = byId[h.id] || []).push(h); });
+  const now = Date.now();
+  const due = [];
+  Object.keys(byId).forEach(id=>{
+    const attempts = byId[id].sort((a,b)=>a.ts-b.ts);
+    let streak = 0, lastTs = null;
+    attempts.forEach(a=>{ if(a.correct){ streak++; lastTs = a.ts; } else { streak = 0; lastTs = null; } });
+    if(streak === 0 || lastTs === null) return; // errou por último -> fica só nos Erros
+    const intervalDias = SPACED_REVIEW_INTERVALS_DIAS[Math.min(streak-1, SPACED_REVIEW_INTERVALS_DIAS.length-1)];
+    const dueAt = lastTs + intervalDias*24*60*60*1000;
+    if(now >= dueAt) due.push({id:Number(id), streak, lastTs});
+  });
+  return due;
+}
+function studyLinkButton(q){
+  if(!DISC_TO_STUDY_LINK[q.disc]) return '';
+  const term = (q.assunto || '').replace(/'/g, "\\'");
+  return `<button class="cfg-btn rstudy-btn" onclick="goStudyTopic('${q.disc.replace(/'/g,"\\'")}','${term}')">📖 Ver aula: ${escapeHtml(q.assunto || q.disc)}</button>`;
+}
+function reviewCard(q, badgeHtml){
+  const gabarito = q.tipo==="CE" ? (q.resp?"CERTO":"ERRADO") : `Alternativa ${LETTERS[q.resp]}`;
+  return `<div class="review-item">
+    <div class="rtags">
+      ${badgeHtml || ''}
+      <span class="tag" style="background:var(--red);color:#fff;">Nº ${2026000+q.id}</span>
+      <span class="tag" style="background:var(--ink);color:var(--paper);">${q.disc}</span>
+      <span class="tag cargo">${CORP_INFO[q.corp].label}</span>
+    </div>
+    <div class="renun">${q.enun}</div>
+    <div class="rexp"><b>Gabarito: ${gabarito}.</b> ${q.exp}</div>
+    ${studyLinkButton(q)}
+  </div>`;
+}
 function renderReview(){
   const box = document.getElementById('reviewList');
   const lastAttempt = {};
   state.history.forEach(h=>{ lastAttempt[h.id]=h; });
   const wrongIds = Object.values(lastAttempt).filter(h=>!h.correct).map(h=>h.id);
   const wrongQs = QUESTIONS.filter(q=>wrongIds.includes(q.id) && matchesFilter(q));
-  if(wrongQs.length===0){
-    box.innerHTML = `<div class="empty-note">Nenhum erro pendente de revisão para este filtro.<br>Responda questões no Simulado — os erros aparecerão aqui com o gabarito comentado.</div>`;
-    return;
+
+  const dueIds = spacedReviewDue().map(d=>d.id);
+  const spacedQs = QUESTIONS.filter(q=>dueIds.includes(q.id) && matchesFilter(q));
+
+  let html = '';
+  html += `<div class="section-title">🔁 Revisão espaçada de hoje (${spacedQs.length})</div>`;
+  if(spacedQs.length === 0){
+    html += `<div class="empty-note">Nada vencido pra revisar hoje neste filtro. Questões que você já acertou voltam aqui depois de 1, 2, 4, 7, 15 e 30 dias — assim a memória não esfria.</div>`;
+  } else {
+    html += spacedQs.map(q=>reviewCard(q, `<span class="tag" style="background:var(--gold-deep);color:#fff;">🔁 revisar</span>`)).join('');
   }
-  box.innerHTML = wrongQs.map(q=>{
-    const gabarito = q.tipo==="CE" ? (q.resp?"CERTO":"ERRADO") : `Alternativa ${LETTERS[q.resp]}`;
-    return `<div class="review-item">
-      <div class="rtags">
-        <span class="tag" style="background:var(--red);color:#fff;">Nº ${2026000+q.id}</span>
-        <span class="tag" style="background:var(--ink);color:var(--paper);">${q.disc}</span>
-        <span class="tag cargo">${CORP_INFO[q.corp].label}</span>
-      </div>
-      <div class="renun">${q.enun}</div>
-      <div class="rexp"><b>Gabarito: ${gabarito}.</b> ${q.exp}</div>
-    </div>`;
-  }).join('');
+
+  html += `<div class="section-title" style="margin-top:24px;">❌ Erros pendentes (${wrongQs.length})</div>`;
+  if(wrongQs.length === 0){
+    html += `<div class="empty-note">Nenhum erro pendente de revisão para este filtro.<br>Responda questões no Simulado — os erros aparecerão aqui com o gabarito comentado.</div>`;
+  } else {
+    html += wrongQs.map(q=>reviewCard(q)).join('');
+  }
+  box.innerHTML = html;
 }
 
 // Filtro por período: "dia" e "semana" usam limites de calendário (dia atual /
