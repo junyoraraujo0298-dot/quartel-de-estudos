@@ -2027,17 +2027,21 @@ const LAW_DECKS = {
   lei10230: { label: "Lei 10.230/2015 (CBMMA)", data: LAW_10230, corp: "BM" },
   lei14751: { label: "Lei 14.751/2023 (Lei Orgânica Nacional — PM e BM)", data: LAW_14751, corp: null },
   comparativo: { label: "Comparativo das 3 Leis (PMMA)", data: LAW_COMPARISON, corp: "PM" },
-  lei11390: { label: "Lei 11.390/2020 (Segurança Contra Incêndio)", data: LAW_11390, corp: "BM" }
+  lei11390: { label: "Lei 11.390/2020 (Segurança Contra Incêndio)", data: LAW_11390, corp: "BM" },
+  cf_art5_pcpe: { label: "Constituição Federal — Art. 5º (Direitos e Garantias Fundamentais)", data: LAW_CF_ART5_PCPE, corp: "PCPE" }
 };
 // Liga cada deck de leitura ao "disc" exato usado nas questões daquela lei,
 // pra permitir pular direto da leitura pra praticar questões só dela.
-// 'comparativo' fica de fora (não é uma lei única, é um resumo de 3).
+// 'comparativo' fica de fora (não é uma lei única, é um resumo de 3). Todo
+// conteúdo de Direito Constitucional (PC-PE) compartilha o mesmo "disc", pra
+// que decks diferentes sobre o mesmo assunto fiquem juntos na prática.
 const LEITURA_DECK_TO_DISC = {
   lei: "Estatuto da PM/MA (Lei 6.513/95)",
   lei12896: "Lei 12.896/2026 (Organização Básica da PMMA)",
   lei10230: "Lei 10.230/2015 (Organização Básica do CBMMA)",
   lei14751: "Lei 14.751/2023 (Lei Orgânica Nacional — PM e BM)",
-  lei11390: "Segurança Contra Incêndio e Pânico"
+  lei11390: "Segurança Contra Incêndio e Pânico",
+  cf_art5_pcpe: "Direito Constitucional"
 };
 const FLASH_DECKS = {
   lei: { label: "Lei 6.513/95 (pergunta e resposta)", data: FLASHCARDS, mode: "quiz" },
@@ -2096,8 +2100,7 @@ const ESTRATEGIA_DECKS = {
   cronograma_pcpe: { label: "Edital e Cronograma — PC-PE (Pernambuco), Agente de Polícia", data: CRONOGRAMA_PCPE, corp: "PCPE" },
   programa_pcpe: { label: "Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", data: PROGRAMA_PCPE_AGENTE, corp: "PCPE" },
   constituicao_pe: { label: "Constituição de PE (trechos) — Segurança Pública e Administração", data: LAW_PE_CONSTITUICAO, corp: "PCPE" },
-  estatuto_policial_pe: { label: "Estatuto do Policial Civil de PE (Lei 6.425/1972)", data: LAW_PE_ESTATUTO_POLICIAL, corp: "PCPE" },
-  cf_art5_pcpe: { label: "Constituição Federal — Art. 5º (Direitos e Garantias Fundamentais)", data: LAW_CF_ART5_PCPE, corp: "PCPE" }
+  estatuto_policial_pe: { label: "Estatuto do Policial Civil de PE (Lei 6.425/1972)", data: LAW_PE_ESTATUTO_POLICIAL, corp: "PCPE" }
 };
 
 state.leituraDeck = "lei";
