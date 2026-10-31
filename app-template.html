@@ -466,6 +466,9 @@
       </div>
       <div class="qf-toggle" id="qfToggleLink" onclick="qfToggleAdvanced()">Mostrar filtro simples ⊖</div>
     </div>
+    <div class="qjump-bar" id="backToTeoriaBar" style="display:none;">
+      <button class="qjump-btn" onclick="voltarParaTeoria()">⬅ Voltar para a Teoria</button>
+    </div>
     <div class="qjump-bar">
       <input type="number" id="qJumpInput" class="cfg-input" placeholder="Nº da questão (ex: 611)" onkeydown="if(event.key==='Enter') jumpToQuestion()">
       <button class="qjump-btn" onclick="jumpToQuestion()">Ir para questão</button>
@@ -599,7 +602,7 @@ const CORP_INFO = {
 const CORPS = ["Todos","PM","BM","PC","PCPE"];
 const LETTERS = ["A","B","C","D","E"];
 
-let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas", profileId:"" };
+let state = { corp:"Todos", disc:[], assunto:[], modalidade:[], keyword:"", qStatus:"todas", advancedOpen:true, queue:[], listPage:0, history:[], attemptMap:{}, mcPicks:{}, statsPeriod:"tudo", statsDisc:"todas", profileId:"", backToTeoriaDeck:null };
 
 // Projeto Supabase proprio deste app -- usado so pra sincronizar o
 // historico de respostas entre aparelhos (tabela user_progress, com
@@ -2668,6 +2671,8 @@ function questionCardHtml(q, displayNum){
 }
 
 function renderQuiz(){
+  const backBar = document.getElementById('backToTeoriaBar');
+  if(backBar) backBar.style.display = state.backToTeoriaDeck ? 'flex' : 'none';
   const container = document.getElementById('quizList');
   const total = state.queue.length;
   if(total === 0){
@@ -3108,6 +3113,7 @@ function practicarQuestoesDaTeoria(){
   const deckInfo = TEORIA_DECKS[state.teoriaDeck];
   const disc = TEORIA_DECK_TO_DISC[state.teoriaDeck];
   if(!disc) return;
+  state.backToTeoriaDeck = state.teoriaDeck;
   state.corp = deckInfo.corp || "Todos";
   state.disc = [disc];
   state.assunto = [];
@@ -3119,6 +3125,12 @@ function practicarQuestoesDaTeoria(){
   buildCorpChips();
   activateTab('quiz');
   buildQueue(); renderQuiz(); renderQfPanel();
+}
+function voltarParaTeoria(){
+  const deckKey = state.backToTeoriaDeck;
+  state.backToTeoriaDeck = null;
+  if(deckKey) state.teoriaDeck = deckKey;
+  activateTab('teoria');
 }
 function renderTeoria(){
   const decks = visibleTeoriaDecks();
@@ -3316,7 +3328,10 @@ function activateTab(tab){
 }
 function setupTabs(){
   document.querySelectorAll('#tabs button').forEach(btn=>{
-    btn.addEventListener('click', ()=> activateTab(btn.dataset.tab));
+    btn.addEventListener('click', ()=> {
+      if(btn.dataset.tab === 'quiz') state.backToTeoriaDeck = null;
+      activateTab(btn.dataset.tab);
+    });
   });
 }
 
