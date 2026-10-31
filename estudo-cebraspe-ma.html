@@ -4166,6 +4166,34 @@ function visibleLawDecks(){
   return out;
 }
 
+// Busca usada nas abas Legislação e Teoria, e também pelo "Ver aula" (que
+// manda como termo o "assunto" inteiro da questão, uma frase longa que
+// dificilmente aparece igualzinha no texto — por isso a busca cai em
+// camadas cada vez mais soltas em vez de só checar substring exata).
+const SEARCH_STOPWORDS = new Set(['de','da','do','das','dos','em','com','para','por','que','uma','um','uns','umas','ao','aos','a','as','à','às','o','os','no','na','nos','nas','e','ou','se','sua','seu','suas','seus','como','sobre','entre','ser','são','é','pelo','pela','pelos','pelas']);
+function flattenTbl(tbl){
+  if(!tbl) return '';
+  return tbl.map(row=>row.join(' ')).join(' ');
+}
+function itemSearchHaystack(it){
+  if(it.t !== 'art') return (it.x||'').toLowerCase();
+  return [(it.n||''), (it.x||''), (it.s||''), flattenTbl(it.tbl)].join(' ').toLowerCase();
+}
+function searchTokens(q){
+  return q.split(/[^a-zà-úâ-ûä-üã-õç0-9]+/i).map(w=>w.trim()).filter(w=>w.length>=3 && !SEARCH_STOPWORDS.has(w));
+}
+function filterStudyItems(deck, qRaw){
+  const q = (qRaw||'').trim().toLowerCase();
+  if(!q) return deck;
+  const exact = deck.filter(it=>itemSearchHaystack(it).includes(q));
+  if(exact.length) return exact;
+  const tokens = searchTokens(q);
+  if(tokens.length===0) return [];
+  const allTok = deck.filter(it=>{ const hay = itemSearchHaystack(it); return tokens.every(t=>hay.includes(t)); });
+  if(allTok.length) return allTok;
+  return deck.filter(it=>{ const hay = itemSearchHaystack(it); return tokens.some(t=>hay.includes(t)); });
+}
+
 function setLeituraDeck(key){
   state.leituraDeck = key;
   document.getElementById('lawSearch').value = '';
@@ -4206,12 +4234,8 @@ function renderLeitura(){
   if(state.leituraDeck === 'comparativo'){ renderComparativo(); return; }
   const deck = decks[state.leituraDeck].data;
   const list = document.getElementById('lawList');
-  const q = document.getElementById('lawSearch').value.trim().toLowerCase();
-  const items = deck.filter(it=>{
-    if(!q) return true;
-    if(it.t==='art') return (it.n||'').toLowerCase().includes(q) || it.x.toLowerCase().includes(q) || (it.s||'').toLowerCase().includes(q);
-    return it.x.toLowerCase().includes(q);
-  });
+  const q = document.getElementById('lawSearch').value.trim();
+  const items = filterStudyItems(deck, q);
   document.getElementById('lawCount').textContent = q ? `${items.length} resultado(s)` : `${deck.filter(i=>i.t==='art').length} artigos`;
   if(items.length===0){
     list.innerHTML = `<div class="law-empty">${deck.length===0 ? 'Conteúdo em preparação — volte em breve.' : 'Nenhum resultado para "'+escapeHtml(q)+'".'}</div>`;
@@ -4327,12 +4351,8 @@ function renderTeoria(){
   const deck = decks[state.teoriaDeck].data;
   const list = document.getElementById('teoriaList');
   const toc = document.getElementById('teoriaToc');
-  const q = document.getElementById('teoriaSearch').value.trim().toLowerCase();
-  const items = deck.filter(it=>{
-    if(!q) return true;
-    if(it.t==='art') return (it.n||'').toLowerCase().includes(q) || it.x.toLowerCase().includes(q) || (it.s||'').toLowerCase().includes(q);
-    return it.x.toLowerCase().includes(q);
-  });
+  const q = document.getElementById('teoriaSearch').value.trim();
+  const items = filterStudyItems(deck, q);
   document.getElementById('teoriaCount').textContent = q ? `${items.length} resultado(s)` : `${deck.filter(i=>i.t==='art').length} tópicos`;
   if(toc){
     const tocRows = deck.map((it,idx)=>{
