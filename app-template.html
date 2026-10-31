@@ -1437,6 +1437,20 @@ const TEORIA_DIREITO_ADMINISTRATIVO_PCPE = [
 {"t": "art", "n": "Objeto do Direito Administrativo", "x": "O Direito Administrativo tem por objeto afirmar as relações entre os Estados (órgãos e entidades) e entre as pessoas (físicas e jurídicas) e o próprio Estado, sendo responsável pelo regime jurídico administrativo — normas administrativas, seus princípios e regras.", "s": "Direito Administrativo: ramo do direito público, não codificado, autônomo e independente."}
 ];
 
+const TEORIA_CONTABILIDADE_PCPE = [
+{"t": "tit", "x": "CONTABILIDADE GERAL — CONCEITOS DA CONTABILIDADE (PC-PE)"},
+{"t": "art", "n": "Conceito oficial (I Congresso Brasileiro de Contabilistas, 1924)", "x": "O primeiro Congresso Brasileiro de Contabilistas, realizado no Rio de Janeiro em agosto de 1924, formulou o conceito oficial: Contabilidade é \"a ciência social que estuda e pratica as funções de orientação, de controle e de registro, relativos aos atos e aos fatos de administração econômica\".", "s": "Mnemônico: Contabilidade (1924) = ORIENTAÇÃO + CONTROLE + REGISTRO, relativos a atos e fatos de ADMINISTRAÇÃO ECONÔMICA. Não confundir com o conceito de ESCRITURAÇÃO (abaixo), que é um conceito diferente."},
+{"t": "art", "n": "Conceito atual (Hilário Franco)", "x": "\"É a ciência social que estuda, controla e interpreta os fatos ocorridos no patrimônio das entidades, mediante o registro, a demonstração e a divulgação desses fatos, com o fim de oferecer informações sobre a composição do patrimônio, suas variações e o resultado econômico decorrente da gestão da riqueza patrimonial aos usuários\" (Hilário Franco)."},
+{"t": "art", "n": "Conceitos correlatos — Escrituração, Contabilista, Contabilizar, Digrafia", "x": "Junto ao conceito de contabilidade, o I Congresso trouxe outros conceitos cobrados em prova.", "tbl": [["Termo", "Significado"], ["Escrituração", "Registro metódico dos fatos administrativos de ordem econômica (fatos contábeis)."], ["Contabilista", "Profissional versado nos estudos de Contabilidade; o profissional que executa os trabalhos de Contabilidade."], ["Contabilizar", "Organizar o patrimônio e as informações de acordo com as normas contábeis, respeitando um processo sistemático."], ["Digrafia", "Afirmar que a escrituração dos fatos será feita por partidas dobradas (todo débito tem um crédito correspondente)."]], "s": "Pegadinha clássica: trocar a definição de um termo pela de outro (ex.: dizer que \"Digrafia\" é o registro metódico dos fatos — isso é Escrituração)."},
+{"t": "art", "n": "Contabilidade x Escrituração — a diferença que a banca cobra", "x": "A contabilidade, como CIÊNCIA, se distingue da escrituração: a escrituração é um meio técnico e disciplinado para registrar a movimentação dos fatos patrimoniais e evidenciá-los; a ciência contábil se ocupa do fenômeno patrimonial e da explicação do que ocorre com o patrimônio em suas transformações, com lastro em teorias, teoremas e um conjunto de conceitos."},
+{"t": "sec", "x": "Classificação da Contabilidade como ciência"},
+{"t": "art", "n": "Ciência social aplicada — não é ciência exata nem humana", "x": "A Contabilidade é classificada como CIÊNCIA SOCIAL APLICADA: social porque trata de relacionamentos entre pessoas (na contabilidade, as pessoas são as CONTAS contábeis) que compõem uma sociedade; aplicada porque seu conhecimento é voltado à prática. NÃO é ciência exata nem ciência humana — essa é a pegadinha mais repetida sobre o tema.", "s": "As Ciências Sociais estudam o funcionamento, a organização e o desenvolvimento da sociedade; cada área estuda a sociedade de um ponto de vista: Antropologia (ser humano), Serviço Social (influência de questões sociais), Direito (conjunto de leis), Economia (produção e consumo de bens e serviços) e Contabilidade (controle e evolução do patrimônio das pessoas, considerando atos e fatos administrativos)."},
+{"t": "art", "n": "Metodologia racional — as 3 condições", "x": "A Contabilidade, como ciência social, trata do patrimônio por meio de conhecimentos obtidos por metodologia racional, com três condições.", "tbl": [["Condição", "O que significa"], ["Generalidade", "Trata de informações de qualquer patrimônio e para qualquer pessoa — não há um usuário específico."], ["Certeza", "A informação deve ser fidedigna e factual, embasada em fatos ocorridos."], ["Busca das causas", "Todo fato deve ser provado com documentos que lhe deram origem."]]},
+{"t": "art", "n": "Objeto, Objetivo, Finalidade, Campo de aplicação e Princípio básico", "x": "Cinco elementos frequentemente confundidos entre si — a pegadinha clássica troca \"objetivo\" por \"finalidade\".", "tbl": [["Elemento", "Resposta"], ["Objeto", "Patrimônio das entidades"], ["Objetivo", "Fornecer informações úteis"], ["Finalidade", "Controlar o patrimônio das entidades"], ["Campo de aplicação", "Qualquer pessoa física ou jurídica"], ["Princípio básico", "Partidas dobradas"]]},
+{"t": "sec", "x": "Evolução histórica recente"},
+{"t": "art", "n": "Lei nº 6.404/1976 — influência norte-americana", "x": "A Lei nº 6.404/1976 representou uma transição no sistema contábil brasileiro, alinhando o país a um novo cenário que começou a se desenhar na década de 1950. Sua inspiração foi a escola NORTE-AMERICANA, que se afastou da escola italiana (predominante até então), mudando o objetivo da contabilidade para o FORNECIMENTO DE INFORMAÇÕES, e não mais o mero controle patrimonial."}
+];
+
 const TEORIA_LINGUA_PORTUGUESA_PCPE = [
 {"t": "tit", "x": "LÍNGUA PORTUGUESA — DOMÍNIO DA ORTOGRAFIA OFICIAL / ACENTUAÇÃO (PC-PE)"},
 {"t": "art", "n": "Regra 1 — Oxítonas", "x": "Acentuam-se as OXÍTONAS terminadas em A(S), E(S), O(S), EM, ENS.", "s": "Ex.: sabiás, também, revês, compôs, ninguém, intervéns, atrás, até."},
@@ -2128,6 +2142,7 @@ const TEORIA_DECKS = {
   hist: { label: "História do Maranhão", data: HIST_MA_LESSON, corp: null },
   direito_penal_pcpe: { label: "Direito Penal — Princípios (PC-PE)", data: TEORIA_DIREITO_PENAL_PCPE, corp: "PCPE" },
   direito_administrativo_pcpe: { label: "Direito Administrativo — Fontes do Direito Administrativo (PC-PE)", data: TEORIA_DIREITO_ADMINISTRATIVO_PCPE, corp: "PCPE" },
+  contabilidade_pcpe: { label: "Contabilidade Geral — Conceitos da Contabilidade (PC-PE)", data: TEORIA_CONTABILIDADE_PCPE, corp: "PCPE" },
   portugues_pcpe: { label: "Língua Portuguesa — Ortografia e Acentuação (PC-PE)", data: TEORIA_LINGUA_PORTUGUESA_PCPE, corp: "PCPE" },
   informatica_win11_pcpe: { label: "Informática — Sistema Operacional Windows 11 (PC-PE)", data: TEORIA_INFORMATICA_WIN11_PCPE, corp: "PCPE" },
   redacao_pcpe: { label: "Redação — Introdução do Texto Dissertativo (PC-PE)", data: TEORIA_REDACAO_PCPE, corp: "PCPE" }
@@ -2139,6 +2154,7 @@ const TEORIA_DECKS = {
 const TEORIA_DECK_TO_DISC = {
   direito_penal_pcpe: "Direito Penal",
   direito_administrativo_pcpe: "Direito Administrativo",
+  contabilidade_pcpe: "Contabilidade Geral",
   portugues_pcpe: "Língua Portuguesa",
   informatica_win11_pcpe: "Informática"
 };
