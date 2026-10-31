@@ -154,7 +154,7 @@
   .review-item .rtags{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
   .review-item .renun{font-size:14px;line-height:1.55;margin-bottom:8px;}
   .review-item .rexp{font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--paper-line);padding-top:8px;}
-  .review-item .rstudy-btn{display:inline-block;margin-top:10px;font-size:12px;padding:6px 12px;}
+  .review-item .rstudy-btn, .qlist-parecer .rstudy-btn{display:inline-block;margin-top:10px;font-size:12px;padding:6px 12px;}
   .empty-note{text-align:center;color:var(--muted);padding:50px 20px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
     border:1px dashed var(--navy-3);border-radius:8px;}
   .reset-link{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted-2);text-align:center;margin-top:30px;cursor:pointer;
@@ -2655,6 +2655,7 @@ function questionCardHtml(q, displayNum){
   const parecerHtml = answered ? `<div class="qlist-parecer">
       <div class="label">Parecer técnico — gabarito comentado</div>
       <p>${escapeHtml(q.exp)}</p>
+      ${studyLinkButton(q)}
     </div>` : '';
   const resultBadge = answered
     ? `<span class="qlist-result ${resultCls}">${isCorrect?'✔ Você acertou':'✘ Você errou — pode responder de novo'}</span>`
