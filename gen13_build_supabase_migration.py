@@ -79,6 +79,7 @@ LAW_PE_ESTATUTO_POLICIAL = extract_const_array('LAW_PE_ESTATUTO_POLICIAL')
 PROGRAMA_PCPE_AGENTE = extract_const_array('PROGRAMA_PCPE_AGENTE')
 LAW_CF_ART5_PCPE = extract_const_array('LAW_CF_ART5_PCPE')
 TEORIA_DIREITO_PENAL_PCPE = extract_const_array('TEORIA_DIREITO_PENAL_PCPE')
+TEORIA_DIREITO_ADMINISTRATIVO_PCPE = extract_const_array('TEORIA_DIREITO_ADMINISTRATIVO_PCPE')
 TEORIA_LINGUA_PORTUGUESA_PCPE = extract_const_array('TEORIA_LINGUA_PORTUGUESA_PCPE')
 TEORIA_INFORMATICA_WIN11_PCPE = extract_const_array('TEORIA_INFORMATICA_WIN11_PCPE')
 TEORIA_REDACAO_PCPE = extract_const_array('TEORIA_REDACAO_PCPE')
@@ -101,6 +102,7 @@ for name, arr in [('LAW_6513', LAW_6513), ('LEI_12896', LEI_12896), ('LAW_14751'
                    ('PROGRAMA_PCPE_AGENTE', PROGRAMA_PCPE_AGENTE),
                    ('LAW_CF_ART5_PCPE', LAW_CF_ART5_PCPE),
                    ('TEORIA_DIREITO_PENAL_PCPE', TEORIA_DIREITO_PENAL_PCPE),
+                   ('TEORIA_DIREITO_ADMINISTRATIVO_PCPE', TEORIA_DIREITO_ADMINISTRATIVO_PCPE),
                    ('TEORIA_LINGUA_PORTUGUESA_PCPE', TEORIA_LINGUA_PORTUGUESA_PCPE),
                    ('TEORIA_INFORMATICA_WIN11_PCPE', TEORIA_INFORMATICA_WIN11_PCPE),
                    ('TEORIA_REDACAO_PCPE', TEORIA_REDACAO_PCPE),
@@ -129,6 +131,7 @@ DECKS = {
     'estrategia_estatuto_policial_pe': ("Estatuto do Policial Civil de PE (Lei 6.425/1972)", 'estrategia', None, LAW_PE_ESTATUTO_POLICIAL),
     'estrategia_programa_pcpe': ("Conteúdo Programático Oficial — PC-PE Agente de Polícia (Edital 2026)", 'estrategia', None, PROGRAMA_PCPE_AGENTE),
     'teoria_direito_penal_pcpe': ("Direito Penal — Princípios (PC-PE)", 'teoria', None, TEORIA_DIREITO_PENAL_PCPE),
+    'teoria_direito_administrativo_pcpe': ("Direito Administrativo — Fontes do Direito Administrativo (PC-PE)", 'teoria', None, TEORIA_DIREITO_ADMINISTRATIVO_PCPE),
     'teoria_portugues_pcpe': ("Língua Portuguesa — Ortografia e Acentuação (PC-PE)", 'teoria', None, TEORIA_LINGUA_PORTUGUESA_PCPE),
     'teoria_informatica_win11_pcpe': ("Informática — Sistema Operacional Windows 11 (PC-PE)", 'teoria', None, TEORIA_INFORMATICA_WIN11_PCPE),
     'teoria_redacao_pcpe': ("Redação — Introdução do Texto Dissertativo (PC-PE)", 'teoria', None, TEORIA_REDACAO_PCPE),
