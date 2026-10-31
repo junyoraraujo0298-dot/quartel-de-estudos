@@ -264,9 +264,15 @@
     padding:12px 16px;margin-bottom:14px;}
   .teoria-toc-title{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1.3px;
     text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
-  .teoria-toc .toc-group{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.5px;
-    text-transform:uppercase;color:var(--gold-deep);margin:10px 0 2px;}
-  .teoria-toc .toc-group:first-child{margin-top:0;}
+  .teoria-toc .toc-group-wrap{margin:6px 0;}
+  .teoria-toc .toc-group-wrap:first-child{margin-top:0;}
+  .teoria-toc .toc-group-btn{display:flex;align-items:center;gap:6px;width:100%;text-align:left;
+    background:none;border:none;padding:4px 0;font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+    letter-spacing:0.5px;text-transform:uppercase;color:var(--gold-deep);cursor:pointer;}
+  .teoria-toc .toc-group-btn:hover{text-decoration:underline;}
+  .teoria-toc .toc-group-btn .toc-caret{display:inline-block;transition:transform .15s ease;font-size:10px;}
+  .teoria-toc .toc-group-btn.open .toc-caret{transform:rotate(90deg);}
+  .teoria-toc .toc-group-items{padding-left:4px;}
   .teoria-toc .toc-link{display:block;width:100%;text-align:left;background:none;border:none;
     padding:3px 0 3px 10px;font-family:'Source Serif 4',serif;font-size:13px;color:var(--accent-txt);
     cursor:pointer;}
@@ -3343,6 +3349,16 @@ const TEORIA_DECK_TO_DISC = {
 const DISC_TO_STUDY_LINK = {};
 Object.keys(LEITURA_DECK_TO_DISC).forEach(k=>{ DISC_TO_STUDY_LINK[LEITURA_DECK_TO_DISC[k]] = {tab:'leitura', deck:k}; });
 Object.keys(TEORIA_DECK_TO_DISC).forEach(k=>{ DISC_TO_STUDY_LINK[TEORIA_DECK_TO_DISC[k]] = {tab:'teoria', deck:k}; });
+function scrollToFirstMatch(listId){
+  const list = document.getElementById(listId);
+  const first = list && list.firstElementChild;
+  if(!first) return;
+  first.scrollIntoView({behavior:'smooth', block:'start'});
+  first.classList.remove('toc-highlight');
+  void first.offsetWidth; // força reflow pra reiniciar a animação se clicar 2x seguidas
+  first.classList.add('toc-highlight');
+  setTimeout(()=> first.classList.remove('toc-highlight'), 1500);
+}
 function goStudyTopic(disc, term){
   const link = DISC_TO_STUDY_LINK[disc];
   if(!link) return;
@@ -3351,11 +3367,13 @@ function goStudyTopic(disc, term){
     activateTab('leitura');
     const input = document.getElementById('lawSearch');
     if(input){ input.value = term || ''; renderLeitura(); }
+    scrollToFirstMatch('lawList');
   } else {
     state.teoriaDeck = link.deck;
     activateTab('teoria');
     const input = document.getElementById('teoriaSearch');
     if(input){ input.value = term || ''; renderTeoria(); }
+    scrollToFirstMatch('teoriaList');
   }
 }
 
@@ -4390,18 +4408,8 @@ function renderTeoria(){
   const items = filterStudyItems(deck, q);
   document.getElementById('teoriaCount').textContent = q ? `${items.length} resultado(s)` : `${deck.filter(i=>i.t==='art').length} tópicos`;
   if(toc){
-    const tocRows = deck.map((it,idx)=>{
-      if(it.t==='cap' || it.t==='sec') return `<div class="toc-group">${escapeHtml(it.x)}</div>`;
-      if(it.t==='art') return `<button type="button" class="toc-link" onclick="teoriaJumpTo(${idx})">${escapeHtml(it.n || it.x.slice(0,60))}</button>`;
-      return '';
-    }).join('');
-    if(tocRows.trim()){
-      toc.style.display = 'block';
-      toc.innerHTML = `<div class="teoria-toc-title">📑 Sumário — clique pra pular direto pro tópico</div>${tocRows}`;
-    } else {
-      toc.style.display = 'none';
-      toc.innerHTML = '';
-    }
+    toc.innerHTML = buildTeoriaToc(deck);
+    toc.style.display = toc.innerHTML.trim() ? 'block' : 'none';
   }
   if(items.length===0){
     list.innerHTML = `<div class="law-empty">${deck.length===0 ? 'Conteúdo em preparação — volte em breve.' : 'Nenhum resultado para "'+escapeHtml(q)+'".'}</div>`;
@@ -4432,6 +4440,43 @@ function teoriaJumpTo(idx){
   void el.offsetWidth; // força reflow pra reiniciar a animação se clicar 2x seguidas no mesmo item
   el.classList.add('toc-highlight');
   setTimeout(()=> el.classList.remove('toc-highlight'), 1500);
+}
+// Monta o sumário agrupado pelos capítulos/seções (t:"cap"/"sec") do deck --
+// só os títulos dos grupos ficam visíveis de cara; os tópicos de cada grupo
+// só aparecem ao clicar (toggleTocGroup). Tópicos que vêm antes de qualquer
+// capítulo/seção (deck sem divisão em grupos) ficam soltos, sempre visíveis.
+function buildTeoriaToc(deck){
+  let html = '';
+  let groupHeader = null;
+  let groupItems = [];
+  const flush = ()=>{
+    if(groupHeader !== null){
+      if(groupItems.length){
+        html += `<div class="toc-group-wrap"><button type="button" class="toc-group-btn" onclick="toggleTocGroup(this)"><span class="toc-caret">▸</span>${escapeHtml(groupHeader)}</button><div class="toc-group-items" style="display:none;">${groupItems.join('')}</div></div>`;
+      }
+    } else {
+      html += groupItems.join('');
+    }
+    groupItems = [];
+  };
+  deck.forEach((it,idx)=>{
+    if(it.t==='cap' || it.t==='sec'){
+      flush();
+      groupHeader = it.x;
+    } else if(it.t==='art'){
+      groupItems.push(`<button type="button" class="toc-link" onclick="teoriaJumpTo(${idx})">${escapeHtml(it.n || it.x.slice(0,60))}</button>`);
+    }
+  });
+  flush();
+  if(!html.trim()) return '';
+  return `<div class="teoria-toc-title">📑 Sumário — clique no assunto pra ver os tópicos</div>${html}`;
+}
+function toggleTocGroup(btn){
+  const panel = btn.nextElementSibling;
+  if(!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  btn.classList.toggle('open', !open);
 }
 
 function visibleEstrategiaDecks(){
