@@ -242,7 +242,7 @@
     color:var(--ink-soft);margin:16px 0 8px;border-left:3px solid var(--gold);padding-left:8px;}
   .law-sec{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.5px;font-style:italic;
     color:var(--muted);margin:10px 0 6px 8px;}
-  .law-art{background:var(--navy-2);border:1px solid var(--navy-3);border-radius:8px;
+  .law-art{background:#F3F4F6;border:1px solid var(--navy-3);border-radius:8px;
     padding:12px 14px;margin-bottom:8px;}
   .law-art .law-num{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:700;
     letter-spacing:0.5px;color:var(--gold-deep);display:block;margin-bottom:5px;}
@@ -254,6 +254,12 @@
     text-transform:uppercase;color:var(--gold-deep);display:block;margin-bottom:3px;}
   .law-simple .law-simple-txt{font-family:'Source Serif 4',serif;font-size:13px;line-height:1.55;
     color:var(--ink);}
+  .law-art-hot{border-left:4px solid var(--red);}
+  .law-hot-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;
+    letter-spacing:0.7px;text-transform:uppercase;color:#FFFFFF;background:var(--red);
+    border-radius:3px;padding:2px 6px;margin-left:8px;vertical-align:middle;}
+  .toc-hot-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);
+    margin-right:6px;vertical-align:middle;flex-shrink:0;}
   .law-table-wrap{overflow-x:auto;margin:2px 0 4px;}
   .law-table{border-collapse:collapse;width:100%;min-width:420px;font-family:'Source Serif 4',serif;font-size:13px;}
   .law-table th,.law-table td{border:1px solid var(--navy-3);padding:6px 10px;text-align:left;vertical-align:top;}
@@ -2737,7 +2743,7 @@ const TEORIA_DIREITO_PENAL_PCPE = [
 {"t": "art", "n": "Princípio da Proporcionalidade", "x": "Deve haver equilíbrio entre a gravidade do crime e a resposta estatal (pena), observado em dois planos: proibição do excesso e proteção insuficiente de bens jurídicos. Tem três destinatários: legislador, juiz e órgãos de execução penal."},
 {"t": "art", "n": "Princípio da Isonomia (Igualdade)", "x": "Tratamento igual aos iguais e desigual aos desiguais, na medida de suas desigualdades (art. 5º, caput, CF)."}
 ,
-{"t": "sec", "x": "Aplicação da Lei Penal no Tempo e no Espaço (Edital: Direito Penal, item 3)"},
+{"t": "sec", "x": "Aplicação da Lei Penal no Tempo e no Espaço (Edital: Direito Penal, item 3)", "hot": true},
 {"t": "art", "n": "3.1 — Tempus Regit Actum", "x": "A lei a ser aplicada é a lei vigente ao tempo do fato. Princípios: irretroatividade da lei penal (art. 5º, XL, CF) e, como exceção, retroatividade da lei penal benéfica. No período de vacatio legis (vacância da lei) é proibida a aplicação da lei penal, mesmo que seja para beneficiar o réu, já que os seus efeitos só iniciam no dia da entrada em vigor."},
 {"t": "art", "n": "3.1 — Os 4 conflitos de leis penais no tempo", "x": "Diante da sucessão de leis penais no tempo, há 4 cenários distintos.", "tbl": [["Conflito", "O que é", "Retroage?"], ["Abolitio criminis", "Lei posterior que exclui um fato como criminoso (descriminalização)", "Sim — alcança até sentença transitada em julgado, cessando execução e efeitos penais"], ["Novatio legis in mellius", "Lei nova mais favorável que a anterior (o fato não deixa de ser crime, só \"melhora\")", "Sim"], ["Novatio legis in pejus (lex gravior)", "Lei nova mais severa que a anterior", "Não"], ["Novatio legis incriminadora", "Lei posterior que criminaliza conduta antes irrelevante para o Direito Penal", "Não"]]},
 {"t": "art", "n": "3.2 — Tempo do crime: Teoria da Atividade", "x": "Considera-se praticado o crime no momento da ação ou omissão, ainda que outro seja o momento do resultado (art. 4º, CP) — é a teoria adotada para o TEMPO do crime. Súmula 711, STF: a lei penal mais grave aplica-se ao crime continuado ou permanente, se sua vigência é anterior à cessação da continuidade ou permanência."},
@@ -2756,7 +2762,7 @@ const TEORIA_DIREITO_PENAL_PCPE = [
 {"t": "art", "n": "3.1 — Interpretação da lei penal: analogia × interpretação extensiva × analógica", "x": "Analogia é forma de INTEGRAÇÃO (preenche lacuna, não existe norma pro caso) — no Direito Penal só se admite analogia \"in bonam partem\" (para beneficiar o réu); é vedada a analogia \"in malam partem\". Interpretação extensiva ocorre quando a lei disse menos do que queria dizer (minus dixit quam voluit), e o STJ admite seu uso mesmo em normas incriminadoras. Interpretação analógica existe quando o texto traz uma fórmula casuística seguida de fórmula genérica (ex.: art. 121, §2º, III — \"veneno, fogo, explosivo [...] ou outro meio insidioso ou cruel\").", "tbl": [["", "Interpretação extensiva", "Interpretação analógica", "Analogia"], ["Natureza", "Forma de interpretação", "Forma de interpretação", "Forma de integração"], ["Existe norma pro caso?", "Sim", "Sim", "Não"], ["O que faz", "Amplia o alcance de uma palavra", "Amplia via cláusula aberta (fórmula casuística + genérica)", "Cria regra nova a partir de outra análoga"]]},
 {"t": "art", "n": "3.1 — Conflito aparente de leis penais", "x": "Ocorre quando duas ou mais normas vigentes parecem, aparentemente, se aplicar ao mesmo fato — resolvido por 4 princípios (mnemônico CASE: Consunção, Alternatividade, Subsidiariedade, Especialidade), evitando o bis in idem.", "tbl": [["Princípio", "Quando se aplica"], ["Especialidade", "A norma especial (com elemento especializante) prevalece sobre a geral, numa comparação ABSTRATA entre os tipos (art. 12, CP) — ex.: infanticídio é homicídio especializado"], ["Subsidiariedade", "A norma \"soldado de reserva\" só incide se não ficar caracterizado fato mais grave; pode ser expressa (\"se o fato não constitui crime mais grave\", ex.: art. 132) ou tácita"], ["Consunção (absorção)", "O crime-fim (mais amplo) absorve o crime-meio — casos de crime progressivo e progressão criminosa; Súmula 17, STJ: quando o falso se exaure no estelionato, sem mais potencialidade lesiva, é por este absorvido"], ["Alternatividade", "Nos tipos mistos alternativos (vários núcleos/verbos, ex.: art. 33 da Lei de Drogas), praticar mais de um verbo no mesmo contexto é crime único"]]}
 ,
-{"t": "sec", "x": "Aplicação da Lei Penal — Complementos (vacatio legis, lei penal em branco, sentença estrangeira)"},
+{"t": "sec", "x": "Aplicação da Lei Penal — Complementos (vacatio legis, lei penal em branco, sentença estrangeira)", "hot": true},
 {"t": "art", "n": "3.1 — Vacatio legis (art. 1º da LINDB)", "x": "Salvo disposição contrária, a lei começa a vigorar em todo o país 45 (quarenta e cinco) dias depois de oficialmente publicada — é a regra residual, usada quando a própria lei não fixa sua data de entrada em vigor. A própria lei pode fixar prazo diferente (maior ou menor). Durante a vacatio legis, a lei NÃO pode ser aplicada em nenhuma hipótese, nem mesmo para beneficiar o réu — seus efeitos só começam no dia em que ela efetivamente entra em vigor.", "s": "Exemplo histórico: o Código Penal de 1969 teve sua vacatio legis prorrogada tantas vezes que acabou sendo revogado (em 2009) sem nunca ter entrado em vigor."},
 {"t": "art", "n": "3.1 — Novatio legis in mellius não se aplica durante a vacatio legis", "x": "Mesmo sendo mais benéfica, a lei nova não pode ser aplicada antes do fim do seu próprio prazo de vacância — a doutrina majoritária rejeita a tese de aplicação antecipada, por não fazer sentido uma \"vacatio sem vacatio\" (e por gerar insegurança jurídica, já que leis publicadas às vezes são alteradas ou revogadas antes mesmo de entrarem em vigor)."},
 {"t": "art", "n": "3.1 — Abolitio criminis temporária (vacatio legis indireta / atipicidade momentânea)", "x": "Fenômeno jurídico (STJ, REsp 1.311.408) em que uma conduta, em determinado período, deixa de ser considerada típica, com efeitos erga omnes, em razão da suspensão temporária da norma incriminadora. Também chamada de \"atipicidade momentânea\". Exemplo clássico: o art. 30 da Lei nº 10.826/2003 (Estatuto do Desarmamento) deu um prazo (180 dias) para que os possuidores de arma de fogo não registrada regularizassem o registro junto ao órgão competente — durante esse prazo, a posse irregular não configurava crime."},
@@ -2907,15 +2913,15 @@ const TEORIA_DIREITO_PROCESSUAL_PENAL_PCPE = [
 
 const TEORIA_CONTABILIDADE_PCPE = [
 {"t": "tit", "x": "CONTABILIDADE GERAL — CONCEITOS DA CONTABILIDADE (PC-PE)"},
-{"t": "art", "n": "Conceito oficial (I Congresso Brasileiro de Contabilistas, 1924)", "x": "O primeiro Congresso Brasileiro de Contabilistas, realizado no Rio de Janeiro em agosto de 1924, formulou o conceito oficial: Contabilidade é \"a ciência social que estuda e pratica as funções de orientação, de controle e de registro, relativos aos atos e aos fatos de administração econômica\".", "s": "Mnemônico: Contabilidade (1924) = ORIENTAÇÃO + CONTROLE + REGISTRO, relativos a atos e fatos de ADMINISTRAÇÃO ECONÔMICA. Não confundir com o conceito de ESCRITURAÇÃO (abaixo), que é um conceito diferente."},
-{"t": "art", "n": "Conceito atual (Hilário Franco)", "x": "\"É a ciência social que estuda, controla e interpreta os fatos ocorridos no patrimônio das entidades, mediante o registro, a demonstração e a divulgação desses fatos, com o fim de oferecer informações sobre a composição do patrimônio, suas variações e o resultado econômico decorrente da gestão da riqueza patrimonial aos usuários\" (Hilário Franco)."},
-{"t": "art", "n": "Conceitos correlatos — Escrituração, Contabilista, Contabilizar, Digrafia", "x": "Junto ao conceito de contabilidade, o I Congresso trouxe outros conceitos cobrados em prova.", "tbl": [["Termo", "Significado"], ["Escrituração", "Registro metódico dos fatos administrativos de ordem econômica (fatos contábeis)."], ["Contabilista", "Profissional versado nos estudos de Contabilidade; o profissional que executa os trabalhos de Contabilidade."], ["Contabilizar", "Organizar o patrimônio e as informações de acordo com as normas contábeis, respeitando um processo sistemático."], ["Digrafia", "Afirmar que a escrituração dos fatos será feita por partidas dobradas (todo débito tem um crédito correspondente)."]], "s": "Pegadinha clássica: trocar a definição de um termo pela de outro (ex.: dizer que \"Digrafia\" é o registro metódico dos fatos — isso é Escrituração)."},
-{"t": "art", "n": "Contabilidade x Escrituração — a diferença que a banca cobra", "x": "A contabilidade, como CIÊNCIA, se distingue da escrituração: a escrituração é um meio técnico e disciplinado para registrar a movimentação dos fatos patrimoniais e evidenciá-los; a ciência contábil se ocupa do fenômeno patrimonial e da explicação do que ocorre com o patrimônio em suas transformações, com lastro em teorias, teoremas e um conjunto de conceitos."},
+{"t": "art", "n": "Conceito oficial (I Congresso Brasileiro de Contabilistas, 1924)", "x": "O primeiro Congresso Brasileiro de Contabilistas, realizado no Rio de Janeiro em agosto de 1924, formulou o conceito oficial: Contabilidade é \"a ciência social que estuda e pratica as funções de orientação, de controle e de registro, relativos aos atos e aos fatos de administração econômica\".", "s": "Mnemônico: Contabilidade (1924) = ORIENTAÇÃO + CONTROLE + REGISTRO, relativos a atos e fatos de ADMINISTRAÇÃO ECONÔMICA. Não confundir com o conceito de ESCRITURAÇÃO (abaixo), que é um conceito diferente.", "hot": true},
+{"t": "art", "n": "Conceito atual (Hilário Franco)", "x": "\"É a ciência social que estuda, controla e interpreta os fatos ocorridos no patrimônio das entidades, mediante o registro, a demonstração e a divulgação desses fatos, com o fim de oferecer informações sobre a composição do patrimônio, suas variações e o resultado econômico decorrente da gestão da riqueza patrimonial aos usuários\" (Hilário Franco).", "hot": true},
+{"t": "art", "n": "Conceitos correlatos — Escrituração, Contabilista, Contabilizar, Digrafia", "x": "Junto ao conceito de contabilidade, o I Congresso trouxe outros conceitos cobrados em prova.", "tbl": [["Termo", "Significado"], ["Escrituração", "Registro metódico dos fatos administrativos de ordem econômica (fatos contábeis)."], ["Contabilista", "Profissional versado nos estudos de Contabilidade; o profissional que executa os trabalhos de Contabilidade."], ["Contabilizar", "Organizar o patrimônio e as informações de acordo com as normas contábeis, respeitando um processo sistemático."], ["Digrafia", "Afirmar que a escrituração dos fatos será feita por partidas dobradas (todo débito tem um crédito correspondente)."]], "s": "Pegadinha clássica: trocar a definição de um termo pela de outro (ex.: dizer que \"Digrafia\" é o registro metódico dos fatos — isso é Escrituração).", "hot": true},
+{"t": "art", "n": "Contabilidade x Escrituração — a diferença que a banca cobra", "x": "A contabilidade, como CIÊNCIA, se distingue da escrituração: a escrituração é um meio técnico e disciplinado para registrar a movimentação dos fatos patrimoniais e evidenciá-los; a ciência contábil se ocupa do fenômeno patrimonial e da explicação do que ocorre com o patrimônio em suas transformações, com lastro em teorias, teoremas e um conjunto de conceitos.", "hot": true},
 {"t": "sec", "x": "Classificação da Contabilidade como ciência"},
 {"t": "art", "n": "Ciência social aplicada — não é ciência exata nem humana", "x": "A Contabilidade é classificada como CIÊNCIA SOCIAL APLICADA: social porque trata de relacionamentos entre pessoas (na contabilidade, as pessoas são as CONTAS contábeis) que compõem uma sociedade; aplicada porque seu conhecimento é voltado à prática. NÃO é ciência exata nem ciência humana — essa é a pegadinha mais repetida sobre o tema.", "s": "As Ciências Sociais estudam o funcionamento, a organização e o desenvolvimento da sociedade; cada área estuda a sociedade de um ponto de vista: Antropologia (ser humano), Serviço Social (influência de questões sociais), Direito (conjunto de leis), Economia (produção e consumo de bens e serviços) e Contabilidade (controle e evolução do patrimônio das pessoas, considerando atos e fatos administrativos)."},
 {"t": "art", "n": "Metodologia racional — as 3 condições", "x": "A Contabilidade, como ciência social, trata do patrimônio por meio de conhecimentos obtidos por metodologia racional, com três condições.", "tbl": [["Condição", "O que significa"], ["Generalidade", "Trata de informações de qualquer patrimônio e para qualquer pessoa — não há um usuário específico."], ["Certeza", "A informação deve ser fidedigna e factual, embasada em fatos ocorridos."], ["Busca das causas", "Todo fato deve ser provado com documentos que lhe deram origem."]]},
 {"t": "art", "n": "Objeto, Objetivo, Finalidade, Campo de aplicação e Princípio básico", "x": "Cinco elementos frequentemente confundidos entre si — a pegadinha clássica troca \"objetivo\" por \"finalidade\".", "tbl": [["Elemento", "Resposta"], ["Objeto", "Patrimônio das entidades"], ["Objetivo", "Fornecer informações úteis"], ["Finalidade", "Controlar o patrimônio das entidades"], ["Campo de aplicação", "Qualquer pessoa física ou jurídica"], ["Princípio básico", "Partidas dobradas"]]},
-{"t": "sec", "x": "Objeto da Contabilidade — Patrimônio"},
+{"t": "sec", "x": "Objeto da Contabilidade — Patrimônio", "hot": true},
 {"t": "art", "n": "O objeto é sempre o PATRIMÔNIO", "x": "O objeto delimita o campo de abrangência de uma ciência. Na Contabilidade, ciência social aplicada, o objeto é SEMPRE o PATRIMÔNIO de uma Entidade, definido como um conjunto de bens, direitos e de obrigações para com terceiros ou sócios.", "s": "Não esqueça: deixe a banca perguntar o que ela quiser e da forma que ela quiser — o OBJETO DA CONTABILIDADE é sempre o PATRIMÔNIO."},
 {"t": "art", "n": "Qualidades do Patrimônio (conceito do CFC, extensível à contabilidade geral)", "x": "O Conselho Federal de Contabilidade trouxe um conceito mais completo de Patrimônio (originalmente para o setor público, mas extensível à contabilidade geral, já que a contabilidade é una), destacando qualidades dos bens e direitos.", "tbl": [["Qualidade", "Significado"], ["Tangíveis", "Bens que possuem corpo, matéria."], ["Intangíveis", "Bens incorpóreos."], ["Onerados", "Bens/direitos que podem ser dados como garantia ou exigem pagamento."], ["Não onerados", "Bens/direitos que não podem ser usados como garantia nem exigem pagamento."], ["Adquiridos", "Bens/direitos comprados, à vista ou a prazo."], ["Formados", "Foram criados pela própria empresa (ex.: uma marca)."], ["Produzidos", "Bens industrializados (transformação de insumos em produto)."], ["Recebidos", "Bens/direitos recebidos como doação."], ["Mantidos", "Bens/direitos sob o domínio da empresa (usufruto)."], ["Utilizados", "Bens/direitos de uso, nas atividades operacionais (máquinas, equipamentos)."]]},
 {"t": "art", "n": "Bens, Direitos e Obrigações", "x": "BENS: conjunto de coisas com valor econômico, conversíveis em dinheiro (mensuráveis), tangíveis ou intangíveis, usadas na realização do objetivo da empresa. DIREITOS: recursos que a empresa tem a receber ou a recuperar junto a terceiros — seus créditos (ex.: duplicata a receber, contas a receber, impostos a recuperar); só existe direito porque alguém deve algo à empresa. OBRIGAÇÕES: dívidas e valores que a empresa deve pagar a terceiros ou sócios — um exigível (ex.: contas a pagar, fornecedores, impostos a recolher).", "s": "Pegadinha clássica: contas de Direitos são nomeadas com \"a receber\"; contas de Obrigações, com \"a pagar\". Trocar um pelo outro é erro grosseiro que a banca adora cobrar. Outra pegadinha: Direitos NÃO são dívidas — são créditos da empresa, o oposto das obrigações."},
@@ -2949,16 +2955,16 @@ const TEORIA_CONTABILIDADE_PCPE = [
 {"t": "art", "n": "Necessidades específicas de cada usuário externo", "x": "Embora as demonstrações contábeis atendam às necessidades comuns da maioria dos usuários, cada categoria tem um interesse específico.", "tbl": [["Usuário externo", "O que busca na informação contábil"], ["Investidores", "Avaliar o risco e o retorno para decidir comprar, manter ou vender investimentos; e se a entidade tem capacidade de pagar dividendos"], ["Empregados", "Estabilidade e lucratividade do empregador; capacidade de pagar remuneração, benefícios de aposentadoria e manter empregos"], ["Credores por empréstimos", "Se os empréstimos concedidos e os juros correspondentes serão pagos no vencimento"], ["Fornecedores (credores comerciais)", "Se as importâncias devidas serão pagas nos vencimentos — interesse tende a ser de prazo mais curto do que o dos credores por empréstimo, salvo dependência da entidade como cliente importante"], ["Clientes", "Continuidade operacional da entidade, sobretudo em relacionamento de longo prazo ou de dependência como fornecedor importante"], ["Governo e agências", "Regulamentar atividades, estabelecer políticas fiscais e compor estatísticas de renda nacional"], ["Público em geral", "Contribuição da entidade à economia local (empregos, fornecedores) e evolução do seu desempenho"]], "s": "Pegadinha de prova: uma agência reguladora setorial (ex.: ANEEL, para uma concessionária de energia elétrica) é usuária externa SECUNDÁRIA — mesmo sendo um usuário importante e específico daquela entidade, não deixa de ser secundária, pois quem aplica dinheiro (primários) são os investidores e credores por empréstimo, não o órgão regulador."},
 {"t": "art", "n": "As 4 técnicas (etapas) do processo contábil", "x": "O processo contábil se desenvolve em quatro técnicas, nesta ordem lógica.", "tbl": [["Técnica", "O que faz"], ["1. Escrituração", "Registra os fatos contábeis em livros próprios, como o Diário e o Razão."], ["2. Demonstrações Contábeis", "Relatórios periódicos, elaborados a partir da escrituração, com as informações da entidade."], ["3. Análise das Demonstrações", "Avalia a situação patrimonial, econômica e financeira a partir das demonstrações."], ["4. Auditoria", "Verifica a adequação e a veracidade das informações contábeis."]], "s": "Mnemônico: ESCRITUROU (registrou) → DEMONSTROU (relatório) → ANALISOU (avaliou) → AUDITOU (conferiu)."},
 {"t": "art", "n": "Síntese rápida", "x": "Natureza: ciência social aplicada. Objeto: patrimônio de entidades. Função: controlar o patrimônio e apurar o resultado. Usuários: internos e externos. Técnicas: escrituração, demonstrações, análise e auditoria."},
-{"t": "sec", "x": "Contas — Conceito e Elementos de Identificação"},
+{"t": "sec", "x": "Contas — Conceito e Elementos de Identificação", "hot": true},
 {"t": "art", "n": "Conceito de conta", "x": "Conta é o item que representa, qualitativa e quantitativamente, os componentes patrimoniais e a evolução do patrimônio. É por meio das contas que a Contabilidade registra e controla as transações que modificam o patrimônio de uma entidade — por isso a conta é considerada a base da Contabilidade.", "s": "Aspecto QUALITATIVO = o nome da conta (que item ela representa, ex.: 'Veículos'). Aspecto QUANTITATIVO = o valor que ela apresenta (ex.: R$ 1.500.000). Cada conta pode informar um bem, um direito, uma obrigação, uma receita ou uma despesa."},
 {"t": "art", "n": "Elementos de identificação da conta no Livro Razão", "x": "A identificação contábil de uma conta é feita, no livro Razão, por meio de seis elementos.", "tbl": [["Elemento", "O que é"], ["Título", "O nome da conta"], ["Data", "Dia, mês e ano do fato — a cronologia da movimentação"], ["Histórico", "Descrição do que aconteceu"], ["Débito", "Valor debitado na conta"], ["Crédito", "Valor creditado na conta"], ["Saldo", "Valor final da conta"]]},
-{"t": "sec", "x": "Classificação das Contas — 5 critérios"},
+{"t": "sec", "x": "Classificação das Contas — 5 critérios", "hot": true},
 {"t": "art", "n": "As 5 classificações da conta", "x": "Devido à sua importância, as contas possuem várias classificações e características, cobradas em concursos. São cinco os critérios de classificação de uma conta.", "tbl": [["Critério", "Classificação"], ["Tipo", "Patrimonial ou de resultado"], ["Natureza", "Devedora ou credora"], ["Impacto", "Aplicação ou origem (de recursos)"], ["Função", "Unilateral ou bilateral"], ["Estrutura", "Sintética ou analítica"]], "s": "O critério mais cobrado e mais aprofundado em prova é o TIPO (patrimonial x resultado) — os próximos itens detalham exatamente esse critério."},
-{"t": "sec", "x": "Contas Patrimoniais x Contas de Resultado — o critério Tipo"},
+{"t": "sec", "x": "Contas Patrimoniais x Contas de Resultado — o critério Tipo", "hot": true},
 {"t": "art", "n": "Contas patrimoniais — estáticas, não se encerram no fim do exercício", "x": "Contas patrimoniais são as que representam o patrimônio (bens, direitos e obrigações). São contas ESTÁTICAS, pois demonstram como se encontra o patrimônio da entidade em determinado momento; compõem o Balanço Patrimonial e compreendem o Ativo, o Passivo exigível e o Patrimônio Líquido.", "s": "Pegadinha: as contas patrimoniais NÃO têm o saldo encerrado ao final do exercício social — o saldo apurado em 31/12 é transferido para 01/01 do ano seguinte (o saldo inicial de uma conta no ano corrente é o seu saldo final do ano anterior). Ex.: o saldo final de 'Banco conta corrente' em 2020 é o saldo inicial dessa mesma conta em 2021."},
 {"t": "art", "n": "Contas de resultado — dinâmicas, contas transitórias", "x": "As contas de resultado são compostas pelas receitas e despesas. São contas DINÂMICAS, pois alteram a situação líquida da empresa: toda receita deixa a empresa mais rica (ganho econômico); toda despesa deixa a empresa mais pobre (perda econômica). São apresentadas na Demonstração do Resultado do Exercício (DRE).", "s": "Pegadinha mais cobrada do tema: as contas de resultado SÃO encerradas (zeradas) ao final do exercício, para que se apure o resultado (lucro ou prejuízo) — por isso são chamadas de contas TRANSITÓRIAS, ao contrário das patrimoniais, cujo saldo nunca zera."},
 {"t": "art", "n": "Síntese — Tipo de conta x grupo x significado", "x": "Quadro-síntese que relaciona o tipo de conta (patrimonial ou de resultado) com o grupo e o significado de cada um.", "tbl": [["Tipo", "Grupo", "Significado"], ["Patrimonial", "Ativo", "Bens e direitos"], ["Patrimonial", "Passivo", "Obrigações"], ["Patrimonial", "Patrimônio Líquido", "Resíduo patrimonial"], ["Resultado", "Receita", "Ganho econômico"], ["Resultado", "Despesa", "Perda econômica"]]},
-{"t": "sec", "x": "Contas Patrimoniais — Exemplos (Ativo, Passivo, PL)"},
+{"t": "sec", "x": "Contas Patrimoniais — Exemplos (Ativo, Passivo, PL)", "hot": true},
 {"t": "art", "n": "Ativo — conceito e exemplos de contas", "x": "O Ativo é o conjunto dos recursos que representam bens e direitos sob o controle da entidade.", "tbl": [["Exemplos de contas do Ativo"], ["Caixa, Banco, Poupança, Aplicações financeiras"], ["Duplicatas a receber, Despesas antecipadas"], ["Veículos, Imóveis, Terrenos, Móveis e utensílios, Estoque"], ["Marcas e patentes, Investimentos, Participações societárias"], ["Benfeitorias em prédios de terceiros, Obras em andamento"]]},
 {"t": "art", "n": "Passivo exigível — conceito e exemplos de contas", "x": "O Passivo exigível representa o conjunto de obrigações perante terceiros — é o capital ALHEIO aplicado na empresa.", "tbl": [["Exemplos de contas do Passivo"], ["Contas a pagar, Duplicata aceita, Nota promissória emitida"], ["Financiamentos, Debêntures emitidas, Empréstimos"], ["Adiantamento de fornecedor, Adiantamento de clientes, Receitas antecipadas"], ["Duplicatas a pagar, Impostos a recolher"], ["Provisão para garantias, Provisão para contingências"]]},
 {"t": "art", "n": "Patrimônio Líquido — conceito e exemplos de contas", "x": "O Patrimônio Líquido é a diferença entre o valor do Ativo e do Passivo de uma entidade em determinado momento. É o resíduo patrimonial, que legalmente representa uma dívida NÃO EXIGÍVEL da empresa junto aos sócios — representa a riqueza dos sócios aplicada na empresa (capital PRÓPRIO).", "tbl": [["Exemplos de contas do PL"], ["Capital social, Reservas de capital"], ["Ajuste de avaliação patrimonial (+/-)"], ["Reservas de lucro, Prejuízo acumulado (-)"], ["Ações em tesouraria (-)"]]},
@@ -4737,29 +4743,51 @@ function renderTeoria(){
   const toc = document.getElementById('teoriaToc');
   const q = document.getElementById('teoriaSearch').value.trim();
   const items = filterStudyItems(deck, q);
+  const hotFlags = computeTeoriaHotFlags(deck);
   document.getElementById('teoriaCount').textContent = q ? `${items.length} resultado(s)` : `${deck.filter(i=>i.t==='art').length} tópicos`;
   if(toc){
-    toc.innerHTML = buildTeoriaToc(deck);
+    toc.innerHTML = buildTeoriaToc(deck, hotFlags);
     toc.style.display = toc.innerHTML.trim() ? 'block' : 'none';
   }
   if(items.length===0){
     list.innerHTML = `<div class="law-empty">${deck.length===0 ? 'Conteúdo em preparação — volte em breve.' : 'Nenhum resultado para "'+escapeHtml(q)+'".'}</div>`;
     return;
   }
+  const hotBadge = '<span class="law-hot-badge" title="Tema de alta incidência no Cebraspe — aparece com frequência nas provas">Alta incidência</span>';
   list.innerHTML = items.map(it=>{
     const idx = deck.indexOf(it);
+    const isHot = hotFlags[idx];
     const txt = escapeHtml(it.x).replace(/\n/g,'<br>');
-    if(it.t==='tit') return `<div class="law-tit" id="teoria-anchor-${idx}">${txt}</div>`;
-    if(it.t==='cap') return `<div class="law-cap" id="teoria-anchor-${idx}">${txt}</div>`;
-    if(it.t==='sec') return `<div class="law-sec" id="teoria-anchor-${idx}">${txt}</div>`;
+    if(it.t==='tit') return `<div class="law-tit" id="teoria-anchor-${idx}">${txt}${isHot?hotBadge:''}</div>`;
+    if(it.t==='cap') return `<div class="law-cap" id="teoria-anchor-${idx}">${txt}${isHot?hotBadge:''}</div>`;
+    if(it.t==='sec') return `<div class="law-sec" id="teoria-anchor-${idx}">${txt}${isHot?hotBadge:''}</div>`;
+    const artClass = isHot ? 'law-art law-art-hot' : 'law-art';
     const sceneBlock = (it.img && TEORIA_SCENES[it.img]) ? `<div class="law-scene">${TEORIA_SCENES[it.img]}</div>` : '';
     const simpleBlock = it.s ? `<div class="law-simple"><span class="law-simple-lab">💡 Pegadinha / dica rápida</span><div class="law-simple-txt">${escapeHtml(it.s)}</div></div>` : '';
     if(it.tbl){
       const tableBlock = `<div class="law-table-wrap"><table class="law-table"><thead><tr>${it.tbl[0].map(h=>`<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${it.tbl.slice(1).map(row=>`<tr>${row.map(c=>`<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-      return `<div class="law-art" id="teoria-anchor-${idx}">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span>${tableBlock}${simpleBlock}</div>`;
+      return `<div class="${artClass}" id="teoria-anchor-${idx}">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}${isHot?hotBadge:''}</span>${tableBlock}${simpleBlock}</div>`;
     }
-    return `<div class="law-art" id="teoria-anchor-${idx}">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}</span><div class="law-txt">${txt}</div>${simpleBlock}</div>`;
+    return `<div class="${artClass}" id="teoria-anchor-${idx}">${sceneBlock}<span class="law-num">${escapeHtml(it.n)}${isHot?hotBadge:''}</span><div class="law-txt">${txt}</div>${simpleBlock}</div>`;
   }).join('');
+}
+// Calcula, pra cada item do deck, se ele cai dentro de um trecho "quente" (alta
+// incidência no Cebraspe, por estatística de provas anteriores). Um item
+// tit/cap/sec com "hot":true liga o estado quente a partir dali, e os "art"
+// seguintes herdam esse estado até o próximo cabeçalho -- a menos que o
+// próprio "art" declare seu "hot" explicitamente, o que sempre prevalece.
+function computeTeoriaHotFlags(deck){
+  const flags = new Array(deck.length).fill(false);
+  let current = false;
+  deck.forEach((it, i)=>{
+    if(it.t==='tit' || it.t==='cap' || it.t==='sec'){
+      current = !!it.hot;
+      flags[i] = !!it.hot;
+    } else if(it.t==='art'){
+      flags[i] = (it.hot !== undefined) ? !!it.hot : current;
+    }
+  });
+  return flags;
 }
 function teoriaJumpTo(idx){
   const input = document.getElementById('teoriaSearch');
@@ -4776,14 +4804,17 @@ function teoriaJumpTo(idx){
 // só os títulos dos grupos ficam visíveis de cara; os tópicos de cada grupo
 // só aparecem ao clicar (toggleTocGroup). Tópicos que vêm antes de qualquer
 // capítulo/seção (deck sem divisão em grupos) ficam soltos, sempre visíveis.
-function buildTeoriaToc(deck){
+function buildTeoriaToc(deck, hotFlags){
+  hotFlags = hotFlags || computeTeoriaHotFlags(deck);
   let html = '';
   let groupHeader = null;
+  let groupHeaderHot = false;
   let groupItems = [];
   const flush = ()=>{
     if(groupHeader !== null){
       if(groupItems.length){
-        html += `<div class="toc-group-wrap"><button type="button" class="toc-group-btn" onclick="toggleTocGroup(this)"><span class="toc-caret">▸</span>${escapeHtml(groupHeader)}</button><div class="toc-group-items" style="display:none;">${groupItems.join('')}</div></div>`;
+        const hotDot = groupHeaderHot ? '<span class="toc-hot-dot" title="Seção de alta incidência no Cebraspe"></span>' : '';
+        html += `<div class="toc-group-wrap"><button type="button" class="toc-group-btn" onclick="toggleTocGroup(this)"><span class="toc-caret">▸</span>${hotDot}${escapeHtml(groupHeader)}</button><div class="toc-group-items" style="display:none;">${groupItems.join('')}</div></div>`;
       }
     } else {
       html += groupItems.join('');
@@ -4794,8 +4825,10 @@ function buildTeoriaToc(deck){
     if(it.t==='cap' || it.t==='sec'){
       flush();
       groupHeader = it.x;
+      groupHeaderHot = !!hotFlags[idx];
     } else if(it.t==='art'){
-      groupItems.push(`<button type="button" class="toc-link" onclick="teoriaJumpTo(${idx})">${escapeHtml(it.n || it.x.slice(0,60))}</button>`);
+      const hotDot = hotFlags[idx] ? '<span class="toc-hot-dot" title="Tópico de alta incidência no Cebraspe"></span>' : '';
+      groupItems.push(`<button type="button" class="toc-link" onclick="teoriaJumpTo(${idx})">${hotDot}${escapeHtml(it.n || it.x.slice(0,60))}</button>`);
     }
   });
   flush();
