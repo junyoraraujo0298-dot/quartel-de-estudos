@@ -4954,15 +4954,19 @@ function buildTeoriaToc(deck, hotFlags){
     if(groupHeader !== null){
       if(groupItems.length){
         const hotDot = groupHeaderHot ? '<span class="toc-hot-dot" title="Seção de alta incidência no Cebraspe"></span>' : '';
-        html += `<div class="toc-group-wrap"><button type="button" class="toc-group-btn" onclick="toggleTocGroup(this)"><span class="toc-caret">▸</span>${hotDot}${escapeHtml(groupHeader)}</button><div class="toc-group-items" style="display:none;">${groupItems.join('')}</div></div>`;
+        html += `<div class="toc-group-wrap"><button type="button" class="toc-group-btn open" onclick="toggleTocGroup(this)"><span class="toc-caret">▸</span>${hotDot}${escapeHtml(groupHeader)}</button><div class="toc-group-items" style="display:block;">${groupItems.join('')}</div></div>`;
       }
     } else {
       html += groupItems.join('');
     }
     groupItems = [];
   };
+  // "tit"/"cap"/"sec" todos abrem um grupo novo no sumário — assim toda
+  // seção (inclusive a primeira, antes de qualquer "sec") fica com seu
+  // próprio tópico geral clicável, em vez de só as seções com "sec" terem
+  // cabeçalho e a primeira aparecer "solta" sem nenhum.
   deck.forEach((it,idx)=>{
-    if(it.t==='cap' || it.t==='sec'){
+    if(it.t==='cap' || it.t==='sec' || it.t==='tit'){
       flush();
       groupHeader = it.x;
       groupHeaderHot = !!hotFlags[idx];
